@@ -64,6 +64,9 @@ uv run --project python python scripts/fragmento_codigo.py book/aplicaciones/_n0
 uv run --project python python scripts/fragmento_codigo.py book/aplicaciones/_n01-mutaciones.md julia \
   julia/test/n01.jl:mutaciones_n01
 
+echo "▸ Componentes del Laboratorio"
+uv run --project python python scripts/laboratorio.py > /dev/null
+
 echo "▸ Saneado de rutas locales en los registros"
 for f in "$R"/*.log "$R"/*.txt; do
   sed -i.bak -e "s#$ROOT#<repo>#g" -e "s#$HOME#~#g" "$f" && rm -f "$f.bak"

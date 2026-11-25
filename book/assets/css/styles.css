@@ -193,3 +193,75 @@ main table th, main table td { text-align: left !important; vertical-align: top;
 /* Fórmulas largas: se desplazan dentro de su caja en pantallas estrechas */
 mjx-container[display="true"] { max-width: 100%; overflow-x: auto; overflow-y: hidden; }
 .lean-estados summary code { white-space: normal; overflow-wrap: anywhere; }
+
+/* Laboratorio de código: ficha, CROSS y BENCH --------------------------- */
+.ficha-evidencia, .cross-studio, .bench-studio {
+  border: 1px solid var(--ll-borde);
+  border-radius: 8px;
+  padding: 0.8rem 0.9rem 0.6rem;
+  margin: 1rem 0 1.4rem;
+  background: #fff;
+}
+.ficha-evidencia header {
+  font-family: var(--bs-font-sans-serif, system-ui, sans-serif);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+.ficha-id { color: var(--ll-tinta); }
+.ficha-evidencia table, .cross-studio table, .bench-studio table { margin-bottom: 0.4rem; }
+.ficha-evidencia figcaption, .cross-studio figcaption, .bench-studio figcaption {
+  font-size: 0.8rem;
+  color: var(--ll-gris);
+}
+.tabla-desplazable { overflow-x: auto; }
+.pilar-etq {
+  font-family: var(--bs-font-sans-serif, system-ui, sans-serif);
+  font-size: 0.8rem;
+  font-weight: 650;
+  letter-spacing: 0.05em;
+}
+.pilar-etq.p-proof { color: var(--ll-proof); }
+.pilar-etq.p-test { color: var(--ll-test); }
+.pilar-etq.p-cross { color: var(--ll-cross); }
+.pilar-etq.p-bench { color: var(--ll-bench); }
+.estado.fallo { color: #8b1a1a; border-color: #e3b5b5; background: #fbeeee; }
+.bench-svg { width: 100%; height: auto; font-family: var(--bs-font-sans-serif, system-ui, sans-serif); }
+.bench-svg .barra { fill: var(--ll-bench); opacity: 0.85; }
+.bench-svg .iqr { stroke: #3d2a00; stroke-width: 2; }
+.bench-svg .eje-rejilla { stroke: #e5e7eb; }
+.bench-svg .eje-txt, .bench-svg .valor-txt { font-size: 11px; fill: var(--ll-gris); }
+.bench-svg .caso-txt { font-size: 12px; fill: var(--ll-texto); }
+
+/* Componente interactivo binario → matriz ------------------------------- */
+.binario-matriz {
+  border: 1px solid var(--ll-borde);
+  border-radius: 8px;
+  padding: 0.8rem 0.9rem;
+  margin: 1rem 0 1.4rem;
+  font-family: var(--bs-font-sans-serif, system-ui, sans-serif);
+}
+.bm-controles { display: flex; flex-wrap: wrap; gap: 0.6rem 1.4rem; margin-bottom: 0.8rem; }
+.bm-grupo { display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem; }
+.bm-etq { font-size: 0.85rem; color: var(--ll-gris); margin-right: 0.2rem; }
+.bm-boton {
+  font: inherit; font-size: 0.85rem;
+  border: 1px solid var(--ll-borde); background: #fff; border-radius: 6px;
+  padding: 0.15rem 0.6rem; cursor: pointer;
+}
+.bm-boton[aria-pressed="true"] { background: var(--ll-tinta); color: #fff; border-color: var(--ll-tinta); }
+.bm-vector { display: flex; flex-wrap: wrap; gap: 0.25rem; margin-bottom: 0.9rem; }
+.bm-matriz { display: grid; gap: 0.25rem; align-items: center; }
+.bm-cab { font-size: 0.78rem; color: var(--ll-gris); text-align: center; }
+.bm-celda {
+  font: inherit; font-size: 0.9rem; font-variant-numeric: tabular-nums;
+  min-width: 2.2rem; padding: 0.25rem 0.2rem; border-radius: 5px; cursor: pointer;
+  border: 1.5px solid var(--bm-color); background: var(--bm-fondo); color: var(--ll-texto);
+}
+.bm-c0 { --bm-color: #1b6ca8; --bm-fondo: #eaf2fa; }
+.bm-c1 { --bm-color: #1f7a6f; --bm-fondo: #e8f4f2; }
+.bm-c2 { --bm-color: #8a5a00; --bm-fondo: #f8f0e3; }
+.bm-c3 { --bm-color: #6f42c1; --bm-fondo: #f1ecfa; }
+.bm-celda.bm-activa, .bm-celda:focus-visible { background: var(--bm-color); color: #fff; outline: 2px solid var(--ll-tinta); outline-offset: 1px; }
+.bm-salida { font-size: 0.9rem; margin: 0.8rem 0 0.3rem; min-height: 1.4em; }
+.bm-nota { font-size: 0.78rem; color: var(--ll-gris); margin: 0; }
+.bm-nota.bm-didactico { color: #8a5a00; }

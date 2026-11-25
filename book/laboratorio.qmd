@@ -1,0 +1,43 @@
+---
+title: "Laboratorio de código"
+---
+
+El **Laboratorio de código** (*Code Studio*) reúne los componentes que el libro usa para mostrar código, demostraciones y evidencias. No es una aplicación aparte: son piezas pequeñas que se integran en los capítulos. Se construyen solo cuando un capítulo las necesita.
+
+## Tres reglas
+
+1. **Fuente única.** Cada componente se genera a partir de la evidencia registrada en `verification/`. Ningún número de una ficha, tabla o gráfico se escribe a mano, y por eso no puede desfasarse del resultado que muestra.
+2. **Procedencia visible.** Cada componente indica de qué fichero procede y su huella SHA-256 abreviada.
+3. **Estático por defecto.** Siempre que es posible, el componente es HTML y SVG estáticos, sin JavaScript. Cuando hay interacción, el JavaScript es propio, no depende de servicios externos y conserva una alternativa estática.
+
+## Componentes disponibles
+
+| Componente | Qué muestra | Fuente | Generador | Interacción | Se usa en |
+|---|---|---|---|---|---|
+| Visor de demostraciones | Código Lean resaltado y estado de prueba de cada táctica | JSON de SubVerso, extraído de la elaboración real | `scripts/visor_lean.py` | Desplegables HTML, sin JavaScript | [F01](fundamentos/f01.qmd), [N01](aplicaciones/n01.qmd) |
+| Ficha de evidencia | Estado de cada pilar, correspondencia, aceptación y limitaciones | `verification/<ID>.yml` | `scripts/laboratorio.py` | Ninguna | F01, N01 |
+| Comparación cruzada | Lecturas, residuos y clasificación de cada discrepancia | `verification/N01/cross_mne.json` | `scripts/laboratorio.py` | Ninguna | N01 |
+| Benchmark | Mediana, rango intercuartílico, memoria y entorno | `verification/<cap>/bench_julia.json` | `scripts/laboratorio.py` | SVG estático y tabla | F01, N01 |
+| Binario → matriz | Correspondencia entre la posición en el archivo y la celda (canal, muestra) | Tablas del oráculo Lean (`lake exe f01_tabla`) | `scripts/laboratorio.py` y `assets/js/binario-matriz.js` | Botones accesibles con teclado | F01 |
+| Fragmentos de código | El código Julia y Python que se ejecuta | Fuentes marcadas con `# FRAGMENTO` | `scripts/fragmento_codigo.py` | Ninguna | F01, N01 |
+
+Todos los componentes se regeneran con una orden:
+
+```bash
+uv run --project python python scripts/laboratorio.py
+```
+
+La integración continua los vuelve a generar y comprueba que coinciden con los versionados. Si alguien cambia una evidencia y olvida regenerar el libro, la comprobación falla.
+
+## Lo que el Laboratorio no hace
+
+- **No inventa datos.** Las simulaciones que no proceden de una ejecución verificada se rotulan como **didácticas**, como la disposición VECTORIZED del componente binario → matriz.
+- **No ejecuta código en el navegador.** GitHub Pages solo sirve archivos estáticos: las demostraciones, las pruebas y los benchmarks se ejecutan antes, y el libro muestra sus resultados registrados.
+
+## Próximos componentes
+
+Se añadirán cuando los pida un capítulo concreto:
+
+- **visor de residuos**, para comparaciones con señales continuas (N03, filtrado);
+- **anatomía del rendimiento**, con perfiles reales de `Profile` (F07);
+- **visor de mutaciones**, que muestre qué prueba detecta cada error (F03).

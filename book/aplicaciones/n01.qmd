@@ -100,16 +100,7 @@ La mutación `en_voltios` produce valores un millón de veces más pequeños. Un
 
 Se comparan tres fuentes: el lector Julia, `mne.io.read_raw_brainvision` (MNE 1.13.2) y el resultado analítico exacto. La tolerancia es $\text{rtol} = 10^{-12}$ con $\text{atol} = 0$, fijada en el protocolo antes de comparar. MNE devuelve voltios, y la conversión a µV se hace de forma explícita.
 
-| Archivo | Julia | MNE | Resultado | Clasificación |
-|---|---|---|---|---|
-| f1 · Float32 | lee | lee | Idénticos bit a bit, residuo 0 | Sin discrepancia |
-| f2 · Int16, $r$ = 0,1 / 0,5 / 1 | lee | lee | Idénticos bit a bit en estos valores | Sin discrepancia |
-| f3 · truncado | lee 3 muestras **con aviso** | lee 3 muestras **sin aviso** | Mismos datos | Diferencia metodológica |
-| f4 · VECTORIZED | **rechaza** | lee correctamente | — | Diferencia metodológica |
-| f5 · mV | **rechaza** | convierte a V | — | Diferencia metodológica |
-| f6 · $f_s$ no entera | lee | lee | Misma $f_s$ y mismos datos | Sin discrepancia |
-
-: Comparación Julia ↔ MNE ↔ analítico. Detalle con errores máximos, RMSE y residuos en `verification/N01/cross_mne.json`.
+{{< include _n01-cross.md >}}
 
 Las tres diferencias **no son errores de nadie**. Son decisiones distintas: MNE admite más casos y nuestro contrato prefiere rechazarlos. Lo importante es que estén **documentadas y clasificadas**, y no que desaparezcan ajustando la tolerancia.
 
@@ -123,14 +114,9 @@ Que Julia y MNE coincidan bit a bit en f1, f2 y f6 no demuestra que ninguno de l
 
 El archivo sintético tiene 31 canales × 500 000 muestras `INT_16`, unos 29,6 MiB, equivalentes a 1000 s a 500 Hz. Antes de medir se comprueba que la composición de etapas da exactamente lo mismo que el lector completo.
 
-| Etapa | Mediana | Memoria asignada |
-|---|---|---|
-| 1 · I/O (`leer_bytes`) | 3,9 ms | 29,6 MiB |
-| 2 · decodificación | 4,7 ms | 29,6 MiB |
-| 3 · calibración a `Float64` | 3,7 ms | 118,3 MiB |
-| Total (`leer_brainvision`) | 12,4 ms | 177,5 MiB |
+{{< include _n01-bench.md >}}
 
-: Medianas de BenchmarkTools en una máquina (Apple M2 Ultra, Julia 1.12.3, un hilo). El archivo ya estaba en la caché del sistema operativo, así que la etapa de I/O no incluye la lectura del disco. Datos completos en `verification/N01/bench_julia.json`.
+El archivo ya estaba en la caché del sistema operativo, de modo que la etapa de I/O mide la lectura desde memoria y no desde el disco.
 
 El tiempo se reparte entre las tres etapas, pero **la memoria no**: para leer 29,6 MiB, el lector asigna **unas seis veces más**. Hay dos causas visibles:
 
@@ -141,16 +127,7 @@ Las dos son **oportunidades de optimización**, y quedan como propuesta. Una opt
 
 ## La ficha de evidencia
 
-| Pilar | Estado | Evidencia |
-|---|---|---|
-| PROOF | [REPRODUCED]{.estado .hecho} | 4 teoremas (bytes, muestras completas, calibración en ℝ), 0 `sorry` |
-| TEST | [REPRODUCED]{.estado .hecho} | 30/30; 4 mutaciones detectadas; contraejemplo real en `Float64` |
-| CROSS | [REPRODUCED]{.estado .hecho} | Julia = MNE = analítico en f1, f2 y f6; 3 diferencias metodológicas clasificadas |
-| BENCH | [REPRODUCED]{.estado .hecho} | Etapas medidas; hallazgo de memoria (≈ 6×) |
-| Correspondencia Lean ↔ código | [INSPECTED]{.estado} | Mismas fórmulas, sin prueba formal |
-| Aceptación científica | [pendiente]{.estado} | Requiere revisión humana |
-
-: Estado de N01-P01. Ficha completa en `verification/N01-P01.yml`.
+{{< include _n01-ficha.md >}}
 
 Para reproducirlo:
 

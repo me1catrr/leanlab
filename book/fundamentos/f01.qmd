@@ -29,6 +29,15 @@ En un registro de 3 canales y 4 muestras, el vector `0, 1, 2, …, 11` se repart
 
 : Vector MULTIPLEXED de 12 posiciones en una matriz de 3 canales × 4 muestras. Esta tabla la imprime el oráculo ejecutable de Lean (`lake exe f01_tabla 4 3`).
 
+Explóralo con otros números de canales. En la disposición **MULTIPLEXED**, la correspondencia la proporcionan las tablas del oráculo Lean. La disposición **VECTORIZED** se muestra solo como contraste didáctico.
+
+```{=html}
+<div class="binario-matriz" data-datos="../assets/datos/binario-matriz.json">
+<noscript><p>Este componente necesita JavaScript. La tabla anterior muestra el mismo ejemplo de forma estática.</p></noscript>
+</div>
+<script src="../assets/js/binario-matriz.js" defer></script>
+```
+
 Que la fórmula sea correcta significa tres cosas:
 
 1. **Acotación.** Nunca se sale del vector: $n\,C + c < N\,C$.
@@ -112,13 +121,7 @@ Tres implementaciones que coinciden en cuatro tamaños son una **evidencia finit
 
 ¿Qué cuesta construir la matriz canales × muestras para un registro realista: 31 canales y 100 000 muestras en `Float32`, es decir, 200 s a 500 Hz? Antes de medir se comprueba que las tres variantes dan el mismo resultado.
 
-| Variante | Mediana | Asignaciones | Memoria |
-|---|---|---|---|
-| Vista: `reshape(v, C, N)` | 6 ns | 1 | 48 B |
-| Copia: `copy(reshape(v, C, N))` | 263 µs | 4 | 12,4 MB |
-| Muestras × canales: `permutedims(…)` | 2,37 ms | 4 | 12,4 MB |
-
-: Medianas de BenchmarkTools en una sola máquina (Apple M2 Ultra, Julia 1.12.3, un hilo). Datos completos con cuantiles y entorno en `verification/F01/bench_julia.json`.
+{{< include _f01-bench.md >}}
 
 La vista es prácticamente gratuita porque no mueve datos: solo crea una cabecera nueva sobre la misma memoria. La copia sí recorre los 12,4 MB. La traspuesta cuesta unas nueve veces más que la copia. Una explicación plausible, que esta medición **no** comprueba, es que reordenar los datos obliga a un acceso a memoria menos favorable para la caché. Comprobarla exigiría perfilar el código, que es el tema de F07.
 
@@ -136,16 +139,7 @@ Su lección es cualitativa: **evitar copias innecesarias importa más que la sin
 
 Todo lo anterior queda registrado en `verification/F01-P01.yml`, junto con los registros de ejecución y las huellas SHA-256 de cada artefacto. Cada pilar tiene un estado de ejecución propio:
 
-| Pilar | Estado | Evidencia |
-|---|---|---|
-| PROOF | [REPRODUCED]{.estado .hecho} | 6 teoremas, 0 `sorry`, axiomas auditados |
-| TEST | [REPRODUCED]{.estado .hecho} | 2122/2122 comprobaciones, mutaciones detectadas |
-| CROSS | [REPRODUCED]{.estado .hecho} | Lean = Julia = NumPy en 4 tamaños, tolerancia 0 |
-| BENCH | [REPRODUCED]{.estado .hecho} | 3 variantes medidas en una máquina |
-| Correspondencia Lean ↔ código | [INSPECTED]{.estado} | Coincidencia numérica finita; sin prueba formal |
-| Aceptación científica | [pendiente]{.estado} | Requiere revisión humana |
-
-: Estado de F01-P01.
+{{< include _f01-ficha.md >}}
 
 Para reproducirlo todo, desde la raíz del repositorio (véase [Preparar el entorno](../entorno.qmd)):
 

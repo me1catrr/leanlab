@@ -25,6 +25,7 @@ codigo:
 
 evidencias:
   PROOF:
+    resumen: "4 teoremas (bytes, muestras completas, calibración en ℝ), 0 sorry"
     estado: REPRODUCED
     teoremas:
       - LeanlabBook.N01.offset_add_le       # N01-P01: el valor cabe en N·C·b bytes (usa idx_lt de F01)
@@ -35,6 +36,7 @@ evidencias:
     axiomas_usados: "propext, Classical.choice, Quot.sound (estándar con ℝ en Mathlib)"
     auditoria: verification/N01/registros/axiomas.txt
   TEST:
+    resumen: "30/30 frente al resultado analítico; 4 mutaciones detectadas; contraejemplo real en Float64"
     estado: REPRODUCED
     resultado: "30/30 (N01) además de 2122/2122 (F01)"
     incluye:
@@ -44,6 +46,7 @@ evidencias:
       - "contraejemplo Float64 real: (x·0,1)·1e-6 ≠ x·(0,1·1e-6) para 24 606 de 65 536 valores Int16 (p. ej. x = −32766)"
     registro: verification/N01/registros/julia_test.log
   CROSS:
+    resumen: "Julia = MNE = analítico en f1, f2 y f6; 3 diferencias metodológicas clasificadas"
     estado: REPRODUCED
     referencia: "MNE-Python 1.13.2 (read_raw_brainvision), NumPy 2.5.5"
     tolerancia: "rtol 1e-12, atol 0 (fijada antes de comparar)"
@@ -56,6 +59,7 @@ evidencias:
       f5_milivoltios: "diferencia metodológica: el contrato lo rechaza; MNE convierte mV"
       f6_fs_no_entera: "sin discrepancia (misma fs no entera)"
   BENCH:
+    resumen: "etapas medidas; la lectura asigna ≈ 6 veces el tamaño del archivo"
     estado: REPRODUCED
     comando: julia --project=julia julia/scripts/bench_n01.jl
     datos: "INT_16 sintético, 31 × 500 000 (29,6 MiB)"

@@ -1,5 +1,5 @@
-fecha: 2026-11-25T12:22:24Z
-commit: 6e129b3f58756ac187a9ca9aaa895eb0f8c76e34
+fecha: 2026-11-25T13:24:24Z
+commit: 917feb789b6138064a93a5f019c6eee4d445b370
 lean: Lean (version 4.36.0, arm64-apple-darwin24.6.0, commit 611c117bfaf7b7ae1cfcf246ce6fba31e8f509e9, Release)
 lake: Lake version 5.0.0-src+611c117 (Lean version 4.36.0)
 julia: julia version 1.12.3

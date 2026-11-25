@@ -1,6 +1,10 @@
 project:
   type: book
   output-dir: _book
+  # Recursos del Laboratorio de código (JavaScript propio y datos de evidencias).
+  resources:
+    - assets/js/
+    - assets/datos/
   # Lista explícita: Quarto solo renderiza estas rutas.
   render:
     - index.qmd
@@ -11,6 +15,7 @@ project:
     - aplicaciones/n01.qmd
     - referencias.qmd
     - entorno.qmd
+    - laboratorio.qmd
 
 lang: es
 
@@ -50,6 +55,7 @@ book:
     - referencias.qmd
   appendices:
     - entorno.qmd
+    - laboratorio.qmd
 
 bibliography: references.bib
 link-citations: true

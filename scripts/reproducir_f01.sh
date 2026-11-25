@@ -44,7 +44,7 @@ if grep -Eq 'sorryAx|depends on axioms: \[.*[^]]*(sorry)' "$R/axiomas.txt"; then
   echo "✗ hay sorry en la auditoría"; exit 1
 fi
 echo "▸ PROOF: oráculo ejecutable"
-for t in 4x3 1x1 7x5 3x31; do
+for t in 4x3 1x1 7x5 3x31 4x2 4x4; do
   (cd lean && lake exe f01_tabla "${t%x*}" "${t#*x}") > "$V/oraculo_lean/tabla_$t.json"
 done
 
@@ -70,6 +70,9 @@ uv run --project python python scripts/fragmento_codigo.py book/fundamentos/_f01
   julia/test/runtests.jl:mutaciones
 uv run --project python python scripts/fragmento_codigo.py book/fundamentos/_f01-numpy.md python \
   python/tests/test_f01_cross.py:matriz_numpy
+
+echo "▸ Componentes del Laboratorio"
+uv run --project python python scripts/laboratorio.py > /dev/null
 
 echo "▸ Saneado de rutas locales en los registros"
 for f in "$R"/*.log "$R"/*.txt; do

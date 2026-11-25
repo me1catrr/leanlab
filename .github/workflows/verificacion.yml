@@ -38,7 +38,7 @@ jobs:
       - name: PROOF · Oráculo ejecutable igual al versionado
         working-directory: lean
         run: |
-          for t in 4x3 1x1 7x5 3x31; do
+          for t in 4x3 1x1 7x5 3x31 4x2 4x4; do
             lake exe f01_tabla "${t%x*}" "${t#*x}" > "../verification/F01/oraculo_lean/tabla_$t.json"
           done
           git diff --exit-code -- ../verification/F01/oraculo_lean
@@ -70,3 +70,8 @@ jobs:
 
       - name: CROSS · NumPy y MNE-Python (pytest)
         run: uv run --project python pytest python/tests -v
+
+      - name: LABORATORIO · Componentes del libro iguales a los versionados
+        run: |
+          uv run --project python python scripts/laboratorio.py
+          git diff --exit-code -- book/fundamentos book/aplicaciones book/assets/datos

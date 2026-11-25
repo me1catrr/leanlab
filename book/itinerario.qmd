@@ -52,4 +52,4 @@ Por ahora solo existen como fichas de alcance:
 
 ## Laboratorio de código (*Code Studio*)
 
-Los componentes interactivos (visor de demostraciones, comparadores, visores de residuos y de rendimiento) se desarrollarán **uno a uno**, cuando los necesite un capítulo concreto. Siempre se alimentarán de datos generados por ejecuciones reales.
+Los componentes que muestran código, demostraciones y evidencias se describen en el apéndice [Laboratorio de código](laboratorio.qmd). Ya están disponibles el visor de demostraciones, la ficha de evidencia, la comparación cruzada, el gráfico de benchmarks y el componente interactivo binario → matriz. Todos se generan a partir de ejecuciones reales y registradas.

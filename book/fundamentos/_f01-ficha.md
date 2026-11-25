@@ -1,0 +1,11 @@
+<!-- Generado por scripts/laboratorio.py desde verification/F01-P01.yml. No editar a mano. -->
+```{=html}
+<figure class="ficha-evidencia" aria-label="Ficha de evidencia F01-P01">
+<header><span class="ficha-id">F01-P01</span> · Del vector binario MULTIPLEXED a la matriz canales × muestras</header>
+<div class="tabla-desplazable"><table>
+<thead><tr><th scope="col">Pilar</th><th scope="col">Estado</th><th scope="col">Evidencia</th></tr></thead>
+<tbody><tr><th scope="row"><span class="pilar-etq p-proof">PROOF</span></th><td><span class="estado hecho">REPRODUCED</span></td><td>6 teoremas, 0 sorry, axiomas auditados (como mucho propext y Quot.sound)</td></tr><tr><th scope="row"><span class="pilar-etq p-test">TEST</span></th><td><span class="estado hecho">REPRODUCED</span></td><td>2122/2122 comprobaciones en Julia; desbordamiento de Int64 y 4 mutaciones detectadas</td></tr><tr><th scope="row"><span class="pilar-etq p-cross">CROSS</span></th><td><span class="estado hecho">REPRODUCED</span></td><td>Lean = Julia = NumPy en 4 tamaños, tolerancia 0; tablas Lean y Julia idénticas byte a byte</td></tr><tr><th scope="row"><span class="pilar-etq p-bench">BENCH</span></th><td><span class="estado hecho">REPRODUCED</span></td><td>vista, copia y permutedims medidas en una máquina (Apple M2 Ultra)</td></tr><tr><th scope="row">Correspondencia Lean ↔ código</th><td><span class="estado">INSPECTED</span></td><td>Las implementaciones Julia y NumPy producen la misma tabla que la especificación ejecutable Lean en los tamaños ensayados (comprobación numérica finita), y idx1_eq_idx_succ demuestra la relación entre las fórmulas en bas…</td></tr><tr><th scope="row">Aceptación científica</th><td><span class="estado">pendiente</span></td><td>Dimensión independiente del estado de ejecución; requiere revisión humana.</td></tr></tbody></table></div>
+<details><summary>Limitaciones declaradas</summary><ul><li>la prueba sobre ℕ no cubre el desbordamiento de Int64 (tratado aparte en TEST)</li><li>CROSS es una comprobación finita en 4 tamaños, no una demostración</li><li>no verifica ningún cargador concreto (eso será N01)</li></ul></details>
+<figcaption>Generada desde <code>verification/F01-P01.yml</code> (SHA-256 a089bc6adb242585…).</figcaption>
+</figure>
+```
