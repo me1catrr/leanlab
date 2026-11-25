@@ -20,8 +20,14 @@ jobs:
       - name: Archivos versionados e historial completo
         run: bash scripts/check-publication.sh --tracked --history
 
+      # Se usa el binario oficial en lugar de gitleaks-action: la acción
+      # escanea solo el rango del push (<primer commit>^..HEAD) y falla en el
+      # primer push, cuyo commit raíz no tiene padre. Aquí se escanea siempre
+      # todo el historial.
       - name: Gitleaks (secretos en todo el historial)
-        uses: gitleaks/gitleaks-action@v2
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITLEAKS_ENABLE_COMMENTS: "false"
+          GITLEAKS_VERSION: "8.24.3"
+        run: |
+          curl -sSfL "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz" \
+            | tar -xz gitleaks
+          ./gitleaks git --redact --verbose --exit-code 1 .
