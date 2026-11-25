@@ -1,0 +1,25 @@
+name = "leanlab_book"
+defaultTargets = ["LeanlabBook"]
+
+# Mathlib fijado a la misma revisión que las demostraciones Lean previas
+# (v4.36.0 = fc4f59e577feb1a4956671bc04ac18aaaf8cd842, véase lake-manifest.json).
+[[require]]
+name = "mathlib"
+git = "https://github.com/leanprover-community/mathlib4"
+rev = "v4.36.0"
+
+# SubVerso: extracción de código resaltado y estados de prueba reales para
+# el visor de demostraciones del libro (decisión D11). Etiqueta emparejada
+# con Lean 4.36.0 por el propio proyecto SubVerso.
+[[require]]
+name = "subverso"
+git = "https://github.com/leanprover/subverso"
+rev = "verso-v4.36.0"
+
+[[lean_lib]]
+name = "LeanlabBook"
+
+# Oráculo ejecutable de F01 para CROSS: imprime la tabla (n, c, idx) en JSON.
+[[lean_exe]]
+name = "f01_tabla"
+root = "LeanlabBook.F01.Tabla"

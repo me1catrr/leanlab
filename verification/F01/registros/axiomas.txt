@@ -1,0 +1,6 @@
+'LeanlabBook.F01.idx_lt' depends on axioms: [propext, Quot.sound]
+'LeanlabBook.F01.idx_mod' depends on axioms: [propext]
+'LeanlabBook.F01.idx_div' depends on axioms: [propext, Quot.sound]
+'LeanlabBook.F01.idx_inj' depends on axioms: [propext, Quot.sound]
+'LeanlabBook.F01.idx_surj' depends on axioms: [propext]
+'LeanlabBook.F01.idx1_eq_idx_succ' depends on axioms: [propext, Quot.sound]

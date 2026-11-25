@@ -15,7 +15,7 @@ Las buenas prácticas de computación científica, como el control de versiones,
 | CROSS | ¿Concuerdan implementaciones independientes? | Si ambas son correctas |
 | BENCH | ¿Cuánto cuesta y por qué? | Si el resultado es correcto |
 
-: Cada pilar responde a una pregunta y deja otras abiertas. {#tbl-pilares}
+: Cada pilar responde a una pregunta y deja otras abiertas.
 
 ## Distinciones obligatorias
 
@@ -79,7 +79,7 @@ Cada evidencia tiene **un estado de ejecución**:
 | `REPRODUCED` | Resultado reproducido mediante una ejecución registrada |
 | `FAILED` | Comprobación realizada sin éxito |
 
-: Estados de ejecución de una evidencia. {#tbl-estados}
+: Estados de ejecución de una evidencia.
 
 La **aceptación científica** es una dimensión aparte, con cuatro valores: *pendiente*, *requiere revisión*, *aceptada* y *rechazada*. Una evidencia reproducida puede seguir pendiente de aceptación.
 

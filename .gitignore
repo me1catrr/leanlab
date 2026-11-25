@@ -17,3 +17,12 @@
 
 # Sistema
 .DS_Store
+
+# Lean (Mathlib y compilación: reproducibles desde lake-manifest.json)
+/lean/.lake/
+/lean/.claude/
+
+# Python
+/python/.venv/
+.pytest_cache/
+__pycache__/

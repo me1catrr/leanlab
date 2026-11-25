@@ -1,0 +1,77 @@
+---
+title: "Preparar el entorno"
+---
+
+Este apéndice explica cómo preparar un equipo para reproducir las evidencias de LEANLAB. Lo que ya cuentan bien otros libros abiertos se enlaza; aquí solo se detalla lo específico de este libro, sobre todo **Lean 4 y Mathlib**.
+
+## Qué hace falta
+
+| Herramienta | Versión usada | Para qué | Cómo instalarla |
+|---|---|---|---|
+| Git | 2.55 | Clonar el repositorio | [ClaudeDo](https://me1catrr.github.io/claudedo/) (Git y GitHub) |
+| Julia | 1.12.3 | TEST, CROSS, BENCH | [JuliaDo](https://me1catrr.github.io/juliado/) (instalación) · [Resonancia](https://me1catrr.github.io/resonancia/) (entorno) |
+| uv | 0.12.23 | Python aislado (3.12) para CROSS | [Resonancia](https://me1catrr.github.io/resonancia/) (entorno) · [docs.astral.sh/uv](https://docs.astral.sh/uv/) |
+| Quarto | 1.10.19 | Compilar el libro | [Resonancia](https://me1catrr.github.io/resonancia/) (entorno) · [quarto.org](https://quarto.org/) |
+| elan + Lean | elan 4.4.0 · Lean 4.36.0 | PROOF | **En este apéndice** |
+| Editor | VS Code o Cursor | Lean InfoView | **En este apéndice** |
+
+: Herramientas y versiones con las que se han generado las evidencias.
+
+No hace falta instalar Python a mano: uv descarga e instala el intérprete 3.12 que fija el proyecto.
+
+## Lean 4 y Mathlib
+
+### elan: el gestor de versiones de Lean
+
+Lean se instala con **elan**, que descarga automáticamente la versión que pide cada proyecto en su fichero `lean-toolchain`. Sigue las instrucciones de instalación de tu sistema en el [repositorio oficial de elan](https://github.com/leanprover/elan) o en la [web de Lean](https://lean-lang.org/), y comprueba después que funciona con `elan --version`. No hace falta instalar Lean aparte: al entrar en `lean/`, elan descarga la versión fijada en `lean/lean-toolchain` (Lean 4.36.0).
+
+### La extensión del editor
+
+Instala la extensión oficial **Lean 4** (`leanprover.lean4`) en VS Code o en Cursor. Su panel **InfoView** muestra, para cada posición del cursor, las hipótesis disponibles y el objetivo pendiente: lo mismo que el visor estático de F01, pero en vivo.
+
+### Mathlib y su caché
+
+LEANLAB depende de Mathlib v4.36.0, fijada en `lean/lake-manifest.json`. Compilar Mathlib desde cero lleva horas, pero la comunidad publica una **caché** con los resultados ya compilados:
+
+```bash
+cd lean
+lake exe cache get      # descarga Mathlib compilado (varios GB)
+lake build              # compila solo el código de LEANLAB
+```
+
+::: {.callout-warning}
+## Espacio en disco
+
+La carpeta `lean/.lake/` ocupa unos **7 GB** con Mathlib, y queda fuera de git. Si ya tienes otro proyecto con la **misma** versión de Mathlib, cada uno guarda su propia copia.
+:::
+
+### Comprobar la instalación
+
+Tres órdenes cubren lo esencial:
+
+```bash
+cd lean
+lake env lean LeanlabBook/F01/Auditoria.lean   # #print axioms de F01-P01
+lake exe f01_tabla 4 3                          # oráculo ejecutable
+```
+
+La primera debe listar seis teoremas que dependen, como mucho, de `propext` y `Quot.sound`. La segunda imprime la tabla del capítulo F01.
+
+## Julia y Python
+
+```bash
+julia --project=julia -e 'using Pkg; Pkg.instantiate()'   # dependencias fijadas en Manifest.toml
+uv sync --project python                                   # Python 3.12 + NumPy + pytest (uv.lock)
+```
+
+## Reproducir las evidencias
+
+Desde la raíz del repositorio:
+
+```bash
+bash scripts/reproducir_f01.sh                     # PROOF, TEST, CROSS y visor
+julia --project=julia julia/scripts/bench_f01.jl   # BENCH (tarda unos segundos)
+quarto render book                                 # el libro, en book/_book/
+```
+
+El script guarda los registros en `verification/F01/registros/` y las huellas en `verification/F01/SHA256SUMS`. Si algo no coincide, el script se detiene con un mensaje de error.

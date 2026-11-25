@@ -159,9 +159,15 @@ leanlab/
     _quarto.yml              configuración del libro
     _editorial.yml           totales editoriales provisionales (F/08, N/10)
     assets/                  tema SCSS, CSS y marca
-  scripts/                   comprobaciones de publicación y del sitio
-  .github/workflows/         publicación en Pages y guardián de publicación
+  lean/                      paquete Lake leanlab_book (Lean 4.36.0, Mathlib v4.36.0, SubVerso)
+  julia/                     paquete LeanlabJulia (implementaciones, Test, benchmarks)
+  python/                    referencias NumPy y pytest (uv, Python 3.12)
+  verification/              fichas de evidencia (F01-P01.yml) y artefactos con SHA256SUMS
+  scripts/                   reproducción (reproducir_f01.sh), visor Lean, guardianes
+  .github/workflows/         publicación, guardián de publicación y verificación (CI)
 ```
+
+**Precaución con Lake.** Ejecuta siempre `lake` con `GIT_CEILING_DIRECTORIES=<repo>/lean/.lake/packages`, como hace `scripts/reproducir_f01.sh`. Si la clonación de un paquete falla a medias, git podría subir hasta el repositorio padre y modificarlo.
 
 **No versionados**, porque `.gitignore` los excluye y nunca se publican:
 - `docs/`: informes internos de sesión, registro de decisiones y contexto local;

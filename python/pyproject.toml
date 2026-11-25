@@ -1,0 +1,16 @@
+[project]
+name = "leanlab-cross"
+version = "0.1.0"
+description = "Referencias Python (NumPy) de LEANLAB para la validación entre implementaciones (CROSS)."
+requires-python = ">=3.12,<3.13"
+license = "MIT"
+dependencies = ["numpy"]
+
+[dependency-groups]
+dev = ["pytest"]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

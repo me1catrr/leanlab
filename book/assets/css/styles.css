@@ -135,3 +135,60 @@ main table th, main table td { text-align: left !important; vertical-align: top;
   /* En pantallas estrechas la tabla se desplaza dentro de su caja, no la página. */
   main table { display: block; max-width: 100%; overflow-x: auto; }
 }
+
+/* Ficha del capítulo ------------------------------------------------- */
+.ficha-cap {
+  font-family: var(--bs-font-sans-serif, system-ui, sans-serif);
+  font-size: 0.9rem;
+  border-left: 3px solid var(--ll-tinta);
+  background: var(--ll-fondo-suave);
+  padding: 0.55rem 0.9rem;
+  margin: 0.4rem 0 1.4rem;
+}
+
+/* Visor estático de demostraciones Lean (generado desde SubVerso) ---- */
+.lean-visor { margin: 1rem 0 1.4rem; }
+.lean-decl { margin-bottom: 1.2rem; }
+.lean-codigo {
+  background: #fbfbfd;
+  border: 1px solid var(--ll-borde);
+  border-left: 3px solid var(--ll-proof);
+  border-radius: 6px;
+  padding: 0.8rem 0.9rem;
+  font-size: 0.84rem;
+  line-height: 1.5;
+  overflow-x: auto;
+  white-space: pre;
+}
+.lean-codigo code { background: none; padding: 0; color: #24292f; }
+.lk-keyword { color: #6f42c1; font-weight: 600; }
+.lk-const { color: #1b4f8a; }
+.lk-var { color: #8a4b08; }
+.lk-docComment { color: #5f6673; font-style: italic; }
+.lk-num { color: #1f7a6f; }
+.lk-operator, .lk-delim, .lk-bracket, .lk-separator { color: #374151; }
+.lean-tac { border-bottom: 1px dotted var(--ll-proof); }
+.lean-tac-n {
+  font-family: var(--bs-font-sans-serif, system-ui, sans-serif);
+  font-size: 0.62rem;
+  color: #fff;
+  background: var(--ll-proof);
+  border-radius: 8px;
+  padding: 0 0.3rem;
+  margin-left: 0.1rem;
+}
+.lean-estados { padding-left: 1.6rem; margin: 0.6rem 0 0; font-size: 0.88rem; }
+.lean-estados li::marker { color: var(--ll-proof); font-weight: 600; }
+.lean-estados summary { cursor: pointer; }
+.lean-estado {
+  background: #f6f3fc;
+  border-radius: 6px;
+  padding: 0.55rem 0.8rem;
+  font-size: 0.82rem;
+  margin: 0.35rem 0 0.6rem;
+  overflow-x: auto;
+}
+.lean-procedencia { font-size: 0.8rem; color: var(--ll-gris); }
+
+/* Fórmulas largas: se desplazan dentro de su caja en pantallas estrechas */
+mjx-container[display="true"] { max-width: 100%; overflow-x: auto; overflow-y: hidden; }

@@ -2,7 +2,7 @@
 title: "Itinerario"
 ---
 
-El itinerario es **provisional**. Ningún capítulo está publicado todavía. Cada capítulo tiene un identificador permanente (F01, N01…). La numeración visible (F01/{{< meta editorial.foundations >}}) muestra la posición dentro del bloque, y su total puede cambiar.
+El itinerario es **provisional**. De momento solo está publicado F01. Cada capítulo tiene un identificador permanente (F01, N01…). La numeración visible (F01/{{< meta editorial.foundations >}}) muestra la posición dentro del bloque, y su total puede cambiar.
 
 ## Fundamentos (*Foundations*)
 
@@ -10,7 +10,7 @@ Conocimiento general sobre verificación de software científico. Se puede estud
 
 | Capítulo | Título provisional | Enlaza a (en lugar de repetir) | Estado |
 |---|---|---|---|
-| F01/{{< meta editorial.foundations >}} | ¿Cómo sabemos que nuestro código científico es correcto? | [ClaudeDo](https://me1catrr.github.io/claudedo/) · [Resonancia](https://me1catrr.github.io/resonancia/) (entorno) | [Pendiente]{.estado} |
+| [F01/{{< meta editorial.foundations >}}](fundamentos/f01.qmd) | ¿Cómo sabemos que nuestro código científico es correcto? | [ClaudeDo](https://me1catrr.github.io/claudedo/) · [Resonancia](https://me1catrr.github.io/resonancia/) (entorno) | [Publicado · v0.1]{.estado .hecho} |
 | F02/{{< meta editorial.foundations >}} | Contratos, tipos, especificaciones e invariantes | [JuliaDo](https://me1catrr.github.io/juliado/) (tipos y despacho múltiple) | [Pendiente]{.estado} |
 | F03/{{< meta editorial.foundations >}} | Pruebas unitarias, generativas, metamórficas y de mutación | [JuliaDo](https://me1catrr.github.io/juliado/) (`Test`) | [Pendiente]{.estado} |
 | F04/{{< meta editorial.foundations >}} | Lean 4 y Mathlib: demostraciones y algoritmos verificados | — | [Pendiente]{.estado} |
@@ -19,9 +19,9 @@ Conocimiento general sobre verificación de software científico. Se puede estud
 | F07/{{< meta editorial.foundations >}} | Rendimiento, perfilado, memoria y calidad | [JuliaDo](https://me1catrr.github.io/juliado/) (rendimiento) | [Pendiente]{.estado} |
 | F08/{{< meta editorial.foundations >}} | Reproducibilidad, integración continua, trazabilidad y desarrollo asistido por IA | [ClaudeDo](https://me1catrr.github.io/claudedo/) | [Pendiente]{.estado} |
 
-: Fundamentos. {#tbl-foundations}
+: Fundamentos.
 
-**F01** girará en torno a un ejemplo pequeño: la correspondencia entre la posición de una muestra en un archivo binario multicanal y su lugar en una matriz canales × muestras. En ese ejemplo aparecen los índices en base cero (Lean, NumPy) y en base uno (Julia), el almacenamiento por columnas (Julia) o por filas (NumPy) y la diferencia entre demostrar una propiedad y comprobar que una implementación la cumple.
+**F01** gira en torno a un ejemplo pequeño: la correspondencia entre la posición de una muestra en un archivo binario multicanal y su lugar en una matriz canales × muestras. En ese ejemplo aparecen los índices en base cero (Lean, NumPy) y en base uno (Julia), el almacenamiento por columnas (Julia) o por filas (NumPy) y la diferencia entre demostrar una propiedad y comprobar que una implementación la cumple.
 
 ## Aplicaciones · NeuroMIND (EEG)
 
@@ -40,7 +40,7 @@ La primera aplicación estudia las etapas del procesamiento de EEG de [NeuroMIND
 | N09/{{< meta editorial.neuromind >}} | Subrogados y control de la FDR [@benjamini1995controlling] | [Pendiente]{.estado} |
 | N10/{{< meta editorial.neuromind >}} | Integración del pipeline | [Pendiente]{.estado} |
 
-: Aplicaciones · NeuroMIND. {#tbl-neuromind}
+: Aplicaciones · NeuroMIND.
 
 ## Aplicaciones futuras
 

@@ -1,0 +1,13 @@
+name = "LeanlabJulia"
+uuid = "5d3b8f0e-6a41-4c2e-9f6b-1e2a7c9d4b10"
+version = "0.1.0"
+authors = ["Rafael Castro Triguero"]
+
+[deps]
+BenchmarkTools = "6e4b80f9-dd63-53aa-95a3-0cdb28fa8baf"
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[compat]
+BenchmarkTools = "1.8.0"
+Test = "1.11.0"
+julia = "1.12"

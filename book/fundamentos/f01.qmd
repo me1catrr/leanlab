@@ -1,0 +1,169 @@
+---
+title: "F01 · ¿Cómo sabemos que nuestro código científico es correcto?"
+subtitle: "Del vector binario a la matriz multicanal"
+---
+
+::: {.ficha-cap}
+**F01/{{< meta editorial.foundations >}}** · Fundamentos · Propiedad **F01-P01** · Estado de la evidencia: [REPRODUCED]{.estado .hecho} · Aceptación científica: [pendiente]{.estado}
+:::
+
+Un registro de EEG o de vibraciones con `C` canales suele guardarse en disco como un **único vector** de números. En la disposición llamada **MULTIPLEXED**, las muestras están intercaladas: primero los `C` canales de la muestra 0, después los `C` canales de la muestra 1, y así sucesivamente. Para analizarlo hay que convertir ese vector en una **matriz canales × muestras**.
+
+Es una operación pequeña, pero un error en ella arruina todo lo que viene después. Además puede pasar desapercibido: **una matriz con las dimensiones correctas puede tener la orientación incorrecta**. Este capítulo usa ese ejemplo para recorrer los cuatro pilares y ver qué aporta cada uno y qué deja sin responder.
+
+## La especificación
+
+Con índices **en base cero**, la muestra `n` del canal `c` ocupa en el vector la posición
+
+$$
+\operatorname{idx}(C, n, c) = n\,C + c, \qquad 0 \le n < N,\quad 0 \le c < C.
+$$
+
+En un registro de 3 canales y 4 muestras, el vector `0, 1, 2, …, 11` se reparte así:
+
+| | muestra 0 | muestra 1 | muestra 2 | muestra 3 |
+|---|---|---|---|---|
+| **canal 0** | 0 | 3 | 6 | 9 |
+| **canal 1** | 1 | 4 | 7 | 10 |
+| **canal 2** | 2 | 5 | 8 | 11 |
+
+: Vector MULTIPLEXED de 12 posiciones en una matriz de 3 canales × 4 muestras. Esta tabla la imprime el oráculo ejecutable de Lean (`lake exe f01_tabla 4 3`).
+
+Que la fórmula sea correcta significa tres cosas:
+
+1. **Acotación.** Nunca se sale del vector: $n\,C + c < N\,C$.
+2. **Inyectividad.** Dos pares $(n, c)$ distintos nunca comparten posición.
+3. **Cobertura.** Toda posición corresponde a algún par $(n, c)$.
+
+## PROOF · Demostrarlo para todas las entradas
+
+Una prueba de software comprueba casos concretos. Una demostración formal cubre **todos** los casos que cumplen las hipótesis. Esta es la demostración de la acotación en Lean 4 con Mathlib [@mathlib2020]. Despliega cada número para ver el estado de prueba que Lean registra en esa táctica: las hipótesis disponibles y el objetivo, tras `⊢`.
+
+{{< include _f01-visor-cota.md >}}
+
+El razonamiento cabe en una cadena de desigualdades: $nC + c < nC + C = (n+1)\,C \le N\,C$. La primera desigualdad usa $c < C$; la última usa $n + 1 \le N$, que en los naturales es exactamente lo que significa $n < N$.
+
+El mismo fichero demuestra la recuperación del canal (resto) y de la muestra (cociente), la inyectividad y la cobertura. También demuestra la correspondencia con los índices **en base uno** que usa Julia:
+
+$$
+\operatorname{idx}_1(C, n, c) = (n-1)\,C + c ,
+$$
+
+$$
+\operatorname{idx}_1(C, n{+}1, c{+}1) = \operatorname{idx}(C, n, c) + 1 .
+$$
+
+::: {.callout-note collapse="true"}
+## Ver las demás demostraciones (recuperación, inyectividad, cobertura, base uno)
+
+{{< include _f01-visor-resto.md >}}
+:::
+
+**Auditoría.** Ninguno de los seis teoremas usa `sorry` ni axiomas propios. Según `#print axioms`, dependen como mucho de `propext` y `Quot.sound`.
+
+::: {.callout-important}
+## Lo que la demostración no dice
+
+Lean ha demostrado propiedades de la **especificación** sobre los números naturales, que no tienen límite de tamaño. Eso no garantiza que el código Julia o Python que usamos aplique esa fórmula, ni dice nada de los enteros de 64 bits, que sí se desbordan. Esas preguntas las responden TEST y CROSS.
+:::
+
+## TEST · Comprobarlo en la implementación
+
+En Julia los índices empiezan en **uno** y las matrices se almacenan **por columnas** (*column-major*). Por eso `reshape(v, C, N)` produce directamente la matriz canales × muestras, y además **sin copiar** los datos: es una vista del mismo bloque de memoria.
+
+{{< include _f01-julia.md >}}
+
+Las pruebas (`julia/test/runtests.jl`, 2122 comprobaciones superadas) cubren:
+
+- el contrato completo (acotación, inyectividad y cobertura) para todos los registros de hasta 12 × 12;
+- la función inversa y que la matriz es una vista que comparte memoria con el vector;
+- las precondiciones, como un índice fuera de rango o una longitud que no es múltiplo de `C`;
+- el **desbordamiento**: con `Int64`, `indice` da la vuelta en silencio para valores enormes, mientras que `indice_comprobado` lanza `OverflowError`. En ℕ este problema no existe, y por eso la demostración no lo ve.
+
+Una prueba vale lo que vale su capacidad de **detectar errores**. Por eso se introducen a propósito tres errores típicos, llamados *mutaciones*, y se comprueba que el contrato los rechaza:
+
+{{< include _f01-mutaciones.md >}}
+
+Hay una cuarta mutación especialmente traicionera: `permutedims(reshape(v, 4, 3))` tiene la forma correcta (3 × 4) pero el contenido equivocado, y las pruebas la detectan. Una prueba que solo mirara las dimensiones la habría dejado pasar.
+
+## CROSS · Contrastarlo con implementaciones independientes
+
+NumPy [@harris2020array] almacena **por filas** por defecto (*row-major*). En NumPy, la forma natural de obtener canales × muestras es `reshape(N, C).T`, donde cada fila del `reshape` es una muestra y `.T` devuelve una vista traspuesta:
+
+{{< include _f01-numpy.md >}}
+
+La comparación usa tres fuentes independientes, todas en base cero:
+
+- el oráculo ejecutable de Lean (`lake exe f01_tabla N C`);
+- la implementación Julia, convertida a base cero;
+- NumPy.
+
+Se compara en cuatro tamaños (4 × 3, 1 × 1, 7 × 5 y 3 × 31). Como son enteros, la **tolerancia es cero**, y se fijó antes de comparar. Las tres tablas coinciden en los cuatro tamaños. Las tablas de Lean y de Julia son idénticas byte a byte, con el mismo SHA-256.
+
+También se comprueba el error típico de NumPy: `v.reshape(C, N)` en orden por filas produce una matriz de la forma correcta y el contenido incorrecto, y la comparación lo detecta.
+
+::: {.callout-note}
+## Qué demuestra esta coincidencia
+
+Tres implementaciones que coinciden en cuatro tamaños son una **evidencia finita**, no una demostración. Lo que sí muestra la comparación es que Julia y NumPy usan **el mismo esquema** que la especificación demostrada en Lean. Esa correspondencia la comprueban TEST y CROSS; no la demuestra PROOF.
+:::
+
+## BENCH · ¿Cuánto cuesta?
+
+¿Qué cuesta construir la matriz canales × muestras para un registro realista: 31 canales y 100 000 muestras en `Float32`, es decir, 200 s a 500 Hz? Antes de medir se comprueba que las tres variantes dan el mismo resultado.
+
+| Variante | Mediana | Asignaciones | Memoria |
+|---|---|---|---|
+| Vista: `reshape(v, C, N)` | 6 ns | 1 | 48 B |
+| Copia: `copy(reshape(v, C, N))` | 263 µs | 4 | 12,4 MB |
+| Muestras × canales: `permutedims(…)` | 2,37 ms | 4 | 12,4 MB |
+
+: Medianas de BenchmarkTools en una sola máquina (Apple M2 Ultra, Julia 1.12.3, un hilo). Datos completos con cuantiles y entorno en `verification/F01/bench_julia.json`.
+
+La vista es prácticamente gratuita porque no mueve datos: solo crea una cabecera nueva sobre la misma memoria. La copia sí recorre los 12,4 MB. La traspuesta cuesta unas nueve veces más que la copia. Una explicación plausible, que esta medición **no** comprueba, es que reordenar los datos obliga a un acceso a memoria menos favorable para la caché. Comprobarla exigiría perfilar el código, que es el tema de F07.
+
+::: {.callout-warning}
+## Cómo leer estos números
+
+- Se midieron en una sola máquina y no son generalizables.
+- No comparan Julia con otros lenguajes.
+- Ignoran la lectura del disco, que en un registro real suele dominar el tiempo.
+
+Su lección es cualitativa: **evitar copias innecesarias importa más que la sintaxis**, y siempre se valida antes de medir.
+:::
+
+## La ficha de evidencia
+
+Todo lo anterior queda registrado en `verification/F01-P01.yml`, junto con los registros de ejecución y las huellas SHA-256 de cada artefacto. Cada pilar tiene un estado de ejecución propio:
+
+| Pilar | Estado | Evidencia |
+|---|---|---|
+| PROOF | [REPRODUCED]{.estado .hecho} | 6 teoremas, 0 `sorry`, axiomas auditados |
+| TEST | [REPRODUCED]{.estado .hecho} | 2122/2122 comprobaciones, mutaciones detectadas |
+| CROSS | [REPRODUCED]{.estado .hecho} | Lean = Julia = NumPy en 4 tamaños, tolerancia 0 |
+| BENCH | [REPRODUCED]{.estado .hecho} | 3 variantes medidas en una máquina |
+| Correspondencia Lean ↔ código | [INSPECTED]{.estado} | Coincidencia numérica finita; sin prueba formal |
+| Aceptación científica | [pendiente]{.estado} | Requiere revisión humana |
+
+: Estado de F01-P01.
+
+Para reproducirlo todo, desde la raíz del repositorio (véase [Preparar el entorno](../entorno.qmd)):
+
+```bash
+bash scripts/reproducir_f01.sh
+julia --project=julia julia/scripts/bench_f01.jl   # BENCH, aparte
+```
+
+## Alcance y limitaciones
+
+- La demostración trata índices naturales sin límite de tamaño; el desbordamiento de `Int64` se trata solo en TEST.
+- CROSS es una comprobación finita en cuatro tamaños.
+- El capítulo no verifica ningún lector de archivos concreto. Ese será el trabajo de **N01** (carga BrainVision), que añadirá unidades, calibración y archivos truncados.
+
+## Ejercicios
+
+1. Escribe la fórmula del índice para la disposición **VECTORIZED**, en la que se guarda un canal entero tras otro. ¿Qué cambia en la demostración de la acotación?
+2. ¿Para qué tamaños $(N, C)$ coinciden por casualidad `v.reshape(C, N)` y la matriz correcta? Justifícalo.
+3. Busca un valor de `n` con el que `indice(2, n, 1)` se desborde en `Int64` y explica por qué Lean no puede detectarlo con esta especificación.
+
+*Las soluciones se publicarán aparte.*

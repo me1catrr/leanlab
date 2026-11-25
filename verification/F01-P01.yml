@@ -1,0 +1,85 @@
+# Ficha de evidencia · F01-P01
+# Reproducción completa: bash scripts/reproducir_f01.sh  (BENCH aparte, ver abajo)
+# Huellas de los artefactos: verification/F01/SHA256SUMS
+# Registros: verification/F01/registros/
+
+id: F01-P01                          # identificador permanente (sin total)
+titulo: Del vector binario MULTIPLEXED a la matriz canales × muestras
+capitulo: F01
+propiedad: "0 ≤ n < N ∧ 0 ≤ c < C → n·C + c < N·C, con inyectividad y cobertura"
+
+especificacion:
+  definicion: "idx C n c = n * C + c  (base cero, disposición MULTIPLEXED)"
+  hipotesis: [n < N, c < C, "índices naturales (ℕ, sin límite de tamaño)"]
+  unidades: adimensional (posiciones en un vector)
+  convenciones:
+    - "base cero en Lean y NumPy; base uno en Julia: indice(C, n, c) = (n - 1) * C + c"
+    - "Julia almacena por columnas (column-major); NumPy, por filas por defecto (row-major)"
+
+codigo:
+  lean: lean/LeanlabBook/F01/Indice.lean
+  julia: julia/src/F01Indice.jl
+  python: python/tests/test_f01_cross.py
+  commit_base: 28dcd53          # las fuentes se identifican por SHA-256 en registros/
+
+evidencias:
+  PROOF:
+    estado: REPRODUCED
+    teoremas:
+      - LeanlabBook.F01.idx_lt             # acotación
+      - LeanlabBook.F01.idx_mod            # recuperación del canal
+      - LeanlabBook.F01.idx_div            # recuperación de la muestra
+      - LeanlabBook.F01.idx_inj            # inyectividad
+      - LeanlabBook.F01.idx_surj           # cobertura
+      - LeanlabBook.F01.idx1_eq_idx_succ   # correspondencia base uno ↔ base cero
+    sorry_admit: 0
+    axiomas_propios: 0
+    axiomas_usados: "como mucho [propext, Quot.sound]; ninguno usa Classical.choice"
+    auditoria: verification/F01/registros/axiomas.txt
+    entorno: {lean: v4.36.0, mathlib: fc4f59e577feb1a4956671bc04ac18aaaf8cd842, subverso: f9c40d4 (verso-v4.36.0)}
+  TEST:
+    estado: REPRODUCED
+    herramienta: Julia Test (stdlib)
+    resultado: "2122/2122 superadas"
+    incluye:
+      - contrato exhaustivo (acotación, inyectividad, cobertura) para N, C ∈ 1..12
+      - inversa (divrem) y vista sin copia (Base.mightalias)
+      - desbordamiento de Int64 (indice_comprobado lanza OverflowError)
+      - "mutaciones detectadas: n↔c intercambiados, base cero mal aplicada, orientación vectorizada, permutedims con forma correcta y contenido distinto"
+    registro: verification/F01/registros/julia_test.log
+  CROSS:
+    estado: REPRODUCED
+    referencias: [oráculo Lean (lake exe f01_tabla), Julia, NumPy 2.5.5]
+    tamanos: ["4×3", "1×1", "7×5", "3×31"]
+    tolerancia: "0 (igualdad exacta: enteros), fijada antes de comparar"
+    resultado: "Lean = Julia = NumPy en los 4 tamaños; las tablas Lean y Julia son idénticas byte a byte (mismo SHA-256)"
+    mutacion_numpy: "reshape(C, N) en orden C: misma forma, contenido distinto → detectada"
+    registro: verification/F01/registros/pytest.log
+  BENCH:
+    estado: REPRODUCED
+    pregunta: "coste de construir la matriz canales × muestras: vista frente a copia"
+    comando: julia --project=julia julia/scripts/bench_f01.jl
+    datos: "Float32 aleatorio, 31 canales × 100 000 muestras"
+    resultados: verification/F01/bench_julia.json
+    advertencias:
+      - "una sola máquina (Apple M2 Ultra), un hilo de Julia; no generalizable"
+      - "no es una comparación entre lenguajes"
+      - "se valida el resultado antes de medir"
+
+correspondencia_formal_implementacion:
+  estado: INSPECTED
+  descripcion: >-
+    Las implementaciones Julia y NumPy producen la misma tabla que la especificación
+    ejecutable Lean en los tamaños ensayados (comprobación numérica finita), y
+    idx1_eq_idx_succ demuestra la relación entre las fórmulas en base uno y base cero.
+    No hay prueba formal de que el código Julia implemente la especificación: Lean
+    razona sobre ℕ y Julia calcula en Int64, que puede desbordarse.
+
+limitaciones:
+  - "la prueba sobre ℕ no cubre el desbordamiento de Int64 (tratado aparte en TEST)"
+  - "CROSS es una comprobación finita en 4 tamaños, no una demostración"
+  - "no verifica ningún cargador concreto (eso será N01)"
+
+aplicacion_posterior: N01
+estado_ejecucion: REPRODUCED
+aceptacion_cientifica: pendiente   # pendiente | requiere revisión | aceptada | rechazada

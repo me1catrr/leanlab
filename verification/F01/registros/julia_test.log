@@ -1,0 +1,5 @@
+Precompiling packages...
+    323.2 ms  ✓ LeanlabJulia
+  1 dependency successfully precompiled in 0 seconds. 17 already precompiled.
+Test Summary:                | Pass  Total  Time
+F01-P01 · índice MULTIPLEXED | 2122   2122  0.3s

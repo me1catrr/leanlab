@@ -21,18 +21,23 @@ LEANLAB es un libro abierto de autoformación que responde combinando cuatro tip
 
 ```text
 book/                 fuentes Quarto del libro (se renderiza en book/_book/)
-scripts/              guardián de publicación y comprobación del sitio
-.github/workflows/    publicación en GitHub Pages y guardián de publicación
+lean/                 demostraciones Lean 4 + Mathlib (PROOF)
+julia/                implementaciones, pruebas y benchmarks en Julia (TEST, BENCH)
+python/               referencias NumPy y pytest (CROSS)
+verification/         fichas de evidencia y artefactos con huellas SHA-256
+scripts/              reproducción, visor de demostraciones y guardianes
+.github/workflows/    publicación, guardián de publicación y verificación
 AGENTS.md, CLAUDE.md  normas para agentes de IA que colaboran en el proyecto
 ```
 
-## Compilar en local
+## Reproducir y compilar en local
 
-Requisito: [Quarto](https://quarto.org/) 1.10.19.
+Versiones usadas: Lean 4.36.0 (elan), Julia 1.12.3, uv 0.12.23 (Python 3.12) y Quarto 1.10.19. El apéndice [Preparar el entorno](https://me1catrr.github.io/leanlab/entorno.html) explica la instalación.
 
 ```bash
-quarto render book
-bash scripts/check-site.sh book/_book
+bash scripts/reproducir_f01.sh          # PROOF, TEST, CROSS de F01
+quarto render book                      # el libro
+bash scripts/check-site.sh book/_book   # comprobaciones antes de publicar
 ```
 
 ## Licencias

@@ -1,0 +1,21 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.12.15, pytest-9.2.0, pluggy-1.7.0 -- <repo>/python/.venv/bin/python
+cachedir: .pytest_cache
+rootdir: <repo>/python
+configfile: pyproject.toml
+collecting ... collected 12 items
+
+python/tests/test_f01_cross.py::test_lean_julia_numpy_coinciden[4-3] PASSED [  8%]
+python/tests/test_f01_cross.py::test_lean_julia_numpy_coinciden[1-1] PASSED [ 16%]
+python/tests/test_f01_cross.py::test_lean_julia_numpy_coinciden[7-5] PASSED [ 25%]
+python/tests/test_f01_cross.py::test_lean_julia_numpy_coinciden[3-31] PASSED [ 33%]
+python/tests/test_f01_cross.py::test_orden_fortran_equivale[4-3] PASSED  [ 41%]
+python/tests/test_f01_cross.py::test_orden_fortran_equivale[1-1] PASSED  [ 50%]
+python/tests/test_f01_cross.py::test_orden_fortran_equivale[7-5] PASSED  [ 58%]
+python/tests/test_f01_cross.py::test_orden_fortran_equivale[3-31] PASSED [ 66%]
+python/tests/test_f01_cross.py::test_traspuesta_es_vista_sin_copia PASSED [ 75%]
+python/tests/test_f01_cross.py::test_mutacion_orientacion_detectada[4-3] PASSED [ 83%]
+python/tests/test_f01_cross.py::test_mutacion_orientacion_detectada[7-5] PASSED [ 91%]
+python/tests/test_f01_cross.py::test_mutacion_orientacion_detectada[3-31] PASSED [100%]
+
+============================== 12 passed in 0.12s ==============================
