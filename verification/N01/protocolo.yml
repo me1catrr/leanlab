@@ -1,0 +1,45 @@
+# Protocolo de N01 · Carga BrainVision — versión 1
+# Fijado ANTES de ejecutar ninguna comparación. Cualquier cambio de tolerancias
+# o de criterios después de ver resultados exige una versión 2 de este fichero.
+
+version: 1
+fecha: 2026-11-25
+datos: "solo ficheros sintéticos generados por scripts/n01_ficheros.py (deterministas, sin aleatoriedad)"
+
+contrato_lector_julia:            # LeanlabJulia.N01BrainVision.leer_brainvision
+  N01-C01: "dimensiones canales × muestras completas"
+  N01-C02: "orientación MULTIPLEXED: x[c, n] = v[(n - 1)·C + c]; VECTORIZED se rechaza (ArgumentError)"
+  N01-C03: "formatos IEEE_FLOAT_32 e INT_16, little-endian; cualquier otro se rechaza"
+  N01-C04: "calibración: x_µV = raw · resolution_c; unidad declarada µV, uV o vacía; el lector devuelve µV"
+  N01-C05: "unidad distinta de µV/uV/vacía → se rechaza (ArgumentError)"
+  N01-C06: "frecuencia fs = 10^6 / SamplingInterval[µs], sin suponer que sea entera"
+  N01-C07: "archivo truncado → aviso y lectura de las muestras completas; ninguna completa → error"
+  N01-C08: "marcadores .vmrk: fuera del alcance de N01 (no se leen)"
+
+referencia_externa:
+  biblioteca: "MNE-Python 1.13.2, mne.io.read_raw_brainvision(preload=True)"
+  unidades: "MNE devuelve voltios; la comparación convierte x_V = 1e-6 · x_µV"
+  nota: "MNE es una referencia independiente, no la verdad"
+
+ficheros:                       # nombre: qué se espera
+  f1_float32:   {C: 3, N: 4, formato: IEEE_FLOAT_32, orientacion: MULTIPLEXED, resolucion: [1.0, 1.0, 1.0], unidad: µV, espera: "Julia = MNE = analítico"}
+  f2_int16:     {C: 3, N: 4, formato: INT_16, orientacion: MULTIPLEXED, resolucion: [0.1, 0.5, 1.0], unidad: µV, espera: "Julia = MNE = analítico, dentro de tolerancia"}
+  f3_truncado:  {C: 3, N: 4, formato: IEEE_FLOAT_32, orientacion: MULTIPLEXED, truncado: "faltan 6 bytes", espera: "Julia: 3 muestras con aviso; MNE: comportamiento a observar y clasificar"}
+  f4_vectorizado: {C: 3, N: 4, formato: IEEE_FLOAT_32, orientacion: VECTORIZED, espera: "Julia: rechazo por contrato; MNE: lee (diferencia metodológica prevista)"}
+  f5_milivoltios: {C: 3, N: 4, formato: IEEE_FLOAT_32, orientacion: MULTIPLEXED, unidad: mV, espera: "Julia: rechazo por contrato; MNE: convierte (diferencia metodológica prevista)"}
+  f6_fs_no_entera: {C: 2, N: 5, formato: INT_16, orientacion: MULTIPLEXED, SamplingInterval_us: 3, espera: "fs = 333333.33… Hz en ambos"}
+
+tolerancias:                    # fijadas antes de comparar
+  senal_voltios: {rtol: 1.0e-12, atol: 0.0}
+  senal_analitica_uV: {rtol: 1.0e-12, atol: 0.0}
+  frecuencia_Hz: {rtol: 1.0e-12, atol: 0.0}
+  forma_y_canales: "igualdad exacta"
+
+informe: "error máximo absoluto y relativo, RMSE y residuos por fichero; no solo correlación"
+
+clasificacion_discrepancias:
+  - error                       # una implementación incumple su especificación
+  - diferencia_metodologica     # decisiones de diseño distintas y documentadas
+  - precision                   # dentro del redondeo esperado de Float64
+  - referencia_no_comparable
+  - pendiente
