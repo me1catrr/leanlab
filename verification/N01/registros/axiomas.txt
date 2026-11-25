@@ -1,0 +1,4 @@
+'LeanlabBook.N01.offset_add_le' depends on axioms: [propext, Quot.sound]
+'LeanlabBook.N01.completas_caben' depends on axioms: [propext]
+'LeanlabBook.N01.completas_maximas' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LeanlabBook.N01.calibrar_asoc' depends on axioms: [propext, Classical.choice, Quot.sound]

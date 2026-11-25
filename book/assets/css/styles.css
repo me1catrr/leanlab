@@ -192,3 +192,4 @@ main table th, main table td { text-align: left !important; vertical-align: top;
 
 /* Fórmulas largas: se desplazan dentro de su caja en pantallas estrechas */
 mjx-container[display="true"] { max-width: 100%; overflow-x: auto; overflow-y: hidden; }
+.lean-estados summary code { white-space: normal; overflow-wrap: anywhere; }

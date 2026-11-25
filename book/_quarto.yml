@@ -8,6 +8,7 @@ project:
     - itinerario.qmd
     - hoja-de-ruta.qmd
     - fundamentos/f01.qmd
+    - aplicaciones/n01.qmd
     - referencias.qmd
     - entorno.qmd
 
@@ -43,6 +44,9 @@ book:
     - part: "Fundamentos"
       chapters:
         - fundamentos/f01.qmd
+    - part: "Aplicaciones · NeuroMIND"
+      chapters:
+        - aplicaciones/n01.qmd
     - referencias.qmd
   appendices:
     - entorno.qmd

@@ -3,7 +3,7 @@ title: "Presentación"
 ---
 
 ::: {.estado-obra}
-**Versión editorial {{< meta editorial.version >}} · en construcción.** Esta edición contiene la presentación, la declaración metodológica, el itinerario, la hoja de ruta, el primer capítulo, [F01](fundamentos/f01.qmd), y un apéndice para [preparar el entorno](entorno.qmd). Los demás capítulos están pendientes. En el [itinerario](itinerario.qmd) cada capítulo aparece con su estado.
+**Versión editorial {{< meta editorial.version >}} · en construcción.** Esta edición contiene la presentación, la declaración metodológica, el itinerario, la hoja de ruta, el primer capítulo de fundamentos, [F01](fundamentos/f01.qmd), la primera aplicación, [N01](aplicaciones/n01.qmd), y un apéndice para [preparar el entorno](entorno.qmd). Los demás capítulos están pendientes. En el [itinerario](itinerario.qmd) cada capítulo aparece con su estado.
 :::
 
 **¿Cómo sabemos que nuestro código científico es correcto, eficiente, reproducible y adecuado para su propósito?**

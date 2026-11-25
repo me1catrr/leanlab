@@ -1,6 +1,6 @@
 name: verificacion
 
-# Reproduce en CI las evidencias de F01-P01 (PROOF, TEST, CROSS) y comprueba
+# Reproduce en CI las evidencias de F01 y N01 (PROOF, TEST, CROSS) y comprueba
 # que los artefactos versionados coinciden con los que se regeneran.
 # BENCH no se ejecuta en CI: las máquinas compartidas no sirven para medir.
 
@@ -14,8 +14,8 @@ permissions:
   contents: read
 
 jobs:
-  f01:
-    name: F01 · PROOF, TEST y CROSS
+  verificar:
+    name: F01 y N01 · PROOF, TEST y CROSS
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -29,9 +29,11 @@ jobs:
       - name: PROOF · Auditoría de axiomas (sin sorry)
         working-directory: lean
         run: |
-          lake env lean LeanlabBook/F01/Auditoria.lean | tee axiomas.txt
-          test "$(grep -c 'depends on axioms' axiomas.txt)" -eq 6
-          ! grep -q 'sorryAx' axiomas.txt
+          lake env lean LeanlabBook/F01/Auditoria.lean | tee axiomas_f01.txt
+          lake env lean LeanlabBook/N01/Auditoria.lean | tee axiomas_n01.txt
+          test "$(grep -c 'depends on axioms' axiomas_f01.txt)" -eq 6
+          test "$(grep -c 'depends on axioms' axiomas_n01.txt)" -eq 4
+          ! grep -q 'sorryAx' axiomas_f01.txt axiomas_n01.txt
 
       - name: PROOF · Oráculo ejecutable igual al versionado
         working-directory: lean
@@ -40,6 +42,15 @@ jobs:
             lake exe f01_tabla "${t%x*}" "${t#*x}" > "../verification/F01/oraculo_lean/tabla_$t.json"
           done
           git diff --exit-code -- ../verification/F01/oraculo_lean
+
+      - name: Instalar uv
+        uses: astral-sh/setup-uv@v6
+
+      - name: DATOS · Ficheros BrainVision sintéticos (huellas)
+        run: |
+          uv run --project python python scripts/n01_ficheros.py
+          (cd verification/N01/ficheros && shasum -a 256 -c ../ficheros.sha256)
+          git diff --exit-code -- verification/N01/esperado
 
       - name: Instalar Julia
         uses: julia-actions/setup-julia@v2
@@ -51,13 +62,11 @@ jobs:
           julia --project=julia -e 'using Pkg; Pkg.instantiate()'
           julia --project=julia julia/test/runtests.jl
 
-      - name: CROSS · Tablas Julia iguales a las versionadas
+      - name: CROSS · Lecturas Julia iguales a las versionadas
         run: |
           julia --project=julia julia/scripts/exportar_tabla.jl
-          git diff --exit-code -- verification/F01/julia
+          julia --project=julia julia/scripts/n01_exportar.jl
+          git diff --exit-code -- verification/F01/julia verification/N01/julia
 
-      - name: Instalar uv
-        uses: astral-sh/setup-uv@v6
-
-      - name: CROSS · NumPy (pytest)
+      - name: CROSS · NumPy y MNE-Python (pytest)
         run: uv run --project python pytest python/tests -v

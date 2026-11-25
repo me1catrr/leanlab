@@ -1,0 +1,169 @@
+{
+ "protocolo": "verification/N01/protocolo.yml (versión 1)",
+ "mne": "1.13.2",
+ "numpy": "2.5.5",
+ "tolerancia": {
+  "rtol": 1e-12,
+  "atol": 0.0
+ },
+ "resultados": [
+  {
+   "fichero": "f1_float32",
+   "julia": "leido",
+   "mne": "leido",
+   "avisos_julia": [],
+   "avisos_mne": [],
+   "mne_vs_analitico": {
+    "error_max_abs": 0.0,
+    "error_max_rel": 0.0,
+    "rmse": 0.0,
+    "dentro_tolerancia": true
+   },
+   "fs_mne": 500.0,
+   "julia_vs_analitico": {
+    "error_max_abs": 0.0,
+    "error_max_rel": 0.0,
+    "rmse": 0.0,
+    "dentro_tolerancia": true
+   },
+   "fs_julia": 500.0,
+   "julia_vs_mne": {
+    "error_max_rel": 0.0,
+    "rmse": 0.0,
+    "dentro_tolerancia": true,
+    "residuo_max_V": 0.0
+   },
+   "fs_iguales": true,
+   "identicos_bit_a_bit": true,
+   "clasificacion": "sin_discrepancia"
+  },
+  {
+   "fichero": "f2_int16",
+   "julia": "leido",
+   "mne": "leido",
+   "avisos_julia": [],
+   "avisos_mne": [],
+   "mne_vs_analitico": {
+    "error_max_abs": 0.0,
+    "error_max_rel": 0.0,
+    "rmse": 0.0,
+    "dentro_tolerancia": true
+   },
+   "fs_mne": 500.0,
+   "julia_vs_analitico": {
+    "error_max_abs": 0.0,
+    "error_max_rel": 0.0,
+    "rmse": 0.0,
+    "dentro_tolerancia": true
+   },
+   "fs_julia": 500.0,
+   "julia_vs_mne": {
+    "error_max_rel": 0.0,
+    "rmse": 0.0,
+    "dentro_tolerancia": true,
+    "residuo_max_V": 0.0
+   },
+   "fs_iguales": true,
+   "identicos_bit_a_bit": true,
+   "clasificacion": "sin_discrepancia"
+  },
+  {
+   "fichero": "f3_truncado",
+   "julia": "leido",
+   "mne": "leido",
+   "avisos_julia": [
+    "archivo truncado: se descartan 6 bytes de una muestra incompleta",
+    "se declaran 4 muestras y hay 3 completas"
+   ],
+   "avisos_mne": [],
+   "mne_vs_analitico": {
+    "error_max_abs": 0.0,
+    "error_max_rel": 0.0,
+    "rmse": 0.0,
+    "dentro_tolerancia": true
+   },
+   "fs_mne": 500.0,
+   "julia_vs_analitico": {
+    "error_max_abs": 0.0,
+    "error_max_rel": 0.0,
+    "rmse": 0.0,
+    "dentro_tolerancia": true
+   },
+   "fs_julia": 500.0,
+   "julia_vs_mne": {
+    "error_max_rel": 0.0,
+    "rmse": 0.0,
+    "dentro_tolerancia": true,
+    "residuo_max_V": 0.0
+   },
+   "fs_iguales": true,
+   "identicos_bit_a_bit": true,
+   "clasificacion": "diferencia_metodologica",
+   "nota": "mismos datos; Julia avisa del truncamiento y MNE no emite ningún aviso"
+  },
+  {
+   "fichero": "f4_vectorizado",
+   "julia": "rechazado",
+   "mne": "leido",
+   "avisos_julia": [],
+   "avisos_mne": [],
+   "mne_vs_analitico": {
+    "error_max_abs": 0.0,
+    "error_max_rel": 0.0,
+    "rmse": 0.0,
+    "dentro_tolerancia": true
+   },
+   "fs_mne": 500.0,
+   "motivo_julia": "orientación VECTORIZED no admitida (solo MULTIPLEXED)",
+   "clasificacion": "diferencia_metodologica",
+   "nota": "el contrato de LEANLAB rechaza el fichero; MNE lo admite"
+  },
+  {
+   "fichero": "f5_milivoltios",
+   "julia": "rechazado",
+   "mne": "leido",
+   "avisos_julia": [],
+   "avisos_mne": [],
+   "mne_vs_analitico": {
+    "error_max_abs": 1.734723475976807e-18,
+    "error_max_rel": 1.927470528863119e-16,
+    "rmse": 5.598795943944346e-19,
+    "dentro_tolerancia": true
+   },
+   "fs_mne": 500.0,
+   "motivo_julia": "unidad «mV» no admitida (solo µV)",
+   "clasificacion": "diferencia_metodologica",
+   "nota": "el contrato de LEANLAB rechaza el fichero; MNE lo admite"
+  },
+  {
+   "fichero": "f6_fs_no_entera",
+   "julia": "leido",
+   "mne": "leido",
+   "avisos_julia": [],
+   "avisos_mne": [],
+   "mne_vs_analitico": {
+    "error_max_abs": 0.0,
+    "error_max_rel": 0.0,
+    "rmse": 0.0,
+    "dentro_tolerancia": true
+   },
+   "fs_mne": 333333.3333333333,
+   "julia_vs_analitico": {
+    "error_max_abs": 0.0,
+    "error_max_rel": 0.0,
+    "rmse": 0.0,
+    "dentro_tolerancia": true
+   },
+   "fs_julia": 333333.3333333333,
+   "julia_vs_mne": {
+    "error_max_rel": 0.0,
+    "rmse": 0.0,
+    "dentro_tolerancia": true,
+    "residuo_max_V": 0.0
+   },
+   "fs_iguales": true,
+   "identicos_bit_a_bit": true,
+   "clasificacion": "sin_discrepancia"
+  }
+ ]
+}

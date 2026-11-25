@@ -26,3 +26,6 @@
 /python/.venv/
 .pytest_cache/
 __pycache__/
+
+# Ficheros BrainVision sintéticos de N01 (se regeneran; huellas en ficheros.sha256)
+/verification/N01/ficheros/

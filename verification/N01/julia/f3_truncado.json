@@ -1,0 +1,1 @@
+{"fichero": "f3_truncado", "estado": "leido", "fs_Hz": 500.0, "avisos": ["archivo truncado: se descartan 6 bytes de una muestra incompleta", "se declaran 4 muestras y hay 3 completas"], "datos_uV": [[1.0, 4.0, 7.0], [2.0, 5.0, 8.0], [3.0, 6.0, 9.0]]}

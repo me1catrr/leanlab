@@ -1,0 +1,5 @@
+Test Summary:                | Pass  Total  Time
+F01-P01 · índice MULTIPLEXED | 2122   2122  0.3s
+  Contraejemplo Float64: x = -32766, (x·0.1)·1e-6 = -0.0032766, x·(0.1·1e-6) = -0.0032765999999999997; 24606 de 65536 valores de Int16 difieren
+Test Summary:            | Pass  Total  Time
+N01 · lector BrainVision |   30     30  1.0s

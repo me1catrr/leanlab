@@ -10,4 +10,8 @@ include("F01Indice.jl")
 using .F01Indice
 export F01Indice
 
+include("N01BrainVision.jl")
+using .N01BrainVision
+export N01BrainVision
+
 end # module

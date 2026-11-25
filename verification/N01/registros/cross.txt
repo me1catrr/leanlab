@@ -1,0 +1,6 @@
+f1_float32         julia=leido      mne=leido   → sin_discrepancia  (residuo máx 0 V, bit a bit: True)
+f2_int16           julia=leido      mne=leido   → sin_discrepancia  (residuo máx 0 V, bit a bit: True)
+f3_truncado        julia=leido      mne=leido   → diferencia_metodologica  (residuo máx 0 V, bit a bit: True)
+f4_vectorizado     julia=rechazado  mne=leido   → diferencia_metodologica
+f5_milivoltios     julia=rechazado  mne=leido   → diferencia_metodologica
+f6_fs_no_entera    julia=leido      mne=leido   → sin_discrepancia  (residuo máx 0 V, bit a bit: True)

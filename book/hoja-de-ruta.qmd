@@ -9,8 +9,8 @@ LEANLAB avanza por **sesiones** de alcance cerrado. Cada una termina con un info
 | S0 | Diagnóstico, normas para agentes y organización de materiales | [Completada]{.estado .hecho} |
 | S1 | Preservación y versionado de demostraciones Lean previas (subrogados, Benjamini–Hochberg y wPLI) | [Completada (en local, privada)]{.estado .hecho} |
 | S2 | Repositorio público y edición mínima del libro | [Completada]{.estado .hecho} |
-| S3 | Fundamentos · F01/{{< meta editorial.foundations >}} y apéndice de entorno | [En curso: esta edición]{.estado} |
-| S4 | NeuroMIND · N01/{{< meta editorial.neuromind >}} (carga BrainVision) | [Pendiente]{.estado} |
+| S3 | Fundamentos · F01/{{< meta editorial.foundations >}} y apéndice de entorno | [Completada]{.estado .hecho} |
+| S4 | NeuroMIND · N01/{{< meta editorial.neuromind >}} (carga BrainVision) | [En curso: esta edición]{.estado} |
 | S5 | Laboratorio de código (Code Studio): primeros componentes | [Pendiente]{.estado} |
 | S6 | Ampliación de NeuroMIND (filtrado, segmentación, espectro, conectividad, subrogados) | [Pendiente]{.estado} |
 | S7+ | Transferencia a BRINCADIANO, SMARTBRIDGES y docencia | [Futuro]{.estado} |
@@ -19,7 +19,7 @@ LEANLAB avanza por **sesiones** de alcance cerrado. Cada una termina con un info
 
 ## Lo que esta edición todavía no contiene
 
-- **Capítulos.** Solo está publicado F01; el resto, pendiente.
-- **Resultados.** Solo los de F01, con su ficha de evidencia.
+- **Capítulos.** Están publicados F01 y N01; el resto, pendiente.
+- **Resultados.** Solo los de F01 y N01, con sus fichas de evidencia.
 - **Demostraciones Lean previas.** Las de subrogados, Benjamini–Hochberg y wPLI se publicarán cuando exista una versión publicable con historial limpio, y después de comprobar que es equivalente al original preservado.
 - **Edición PDF.** Prevista con Typst en una segunda fase editorial.

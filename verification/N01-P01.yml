@@ -1,0 +1,87 @@
+# Ficha de evidencia · N01 (carga BrainVision)
+# Reproducción: bash scripts/reproducir_n01.sh   (BENCH aparte, ver abajo)
+# Protocolo fijado antes de comparar: verification/N01/protocolo.yml (versión 1, commit 6e129b3)
+# Huellas: verification/N01/SHA256SUMS y verification/N01/ficheros.sha256
+
+id: N01-P01
+titulo: Lectura de un registro BrainVision MULTIPLEXED en µV
+capitulo: N01
+aplicacion: NeuroMIND (EEG) · solo datos sintéticos
+propiedad: "contrato N01-C01…C08 del lector (dimensiones, orientación, formatos, calibración, unidades, frecuencia, truncado)"
+
+especificacion:
+  contrato: verification/N01/protocolo.yml
+  convenciones:
+    - "posición del valor (n, c): offset = idx(C, n, c) · b bytes (F01)"
+    - "x_µV = raw · resolución; MNE trabaja en voltios: x_V = 1e-6 · x_µV"
+    - "fs = 10^6 / SamplingInterval[µs]"
+
+codigo:
+  julia: julia/src/N01BrainVision.jl        # lector original de LEANLAB, no el de ningún motor
+  lean: lean/LeanlabBook/N01/Bytes.lean
+  ficheros: scripts/n01_ficheros.py         # generador determinista + resultado analítico exacto
+  cross: scripts/n01_cross.py
+  commit_protocolo: 6e129b3
+
+evidencias:
+  PROOF:
+    estado: REPRODUCED
+    teoremas:
+      - LeanlabBook.N01.offset_add_le       # N01-P01: el valor cabe en N·C·b bytes (usa idx_lt de F01)
+      - LeanlabBook.N01.completas_caben     # N01-P02a
+      - LeanlabBook.N01.completas_maximas   # N01-P02b
+      - LeanlabBook.N01.calibrar_asoc       # N01-P03: (x·r)·s = x·(r·s) en ℝ
+    sorry_admit: 0
+    axiomas_usados: "propext, Classical.choice, Quot.sound (estándar con ℝ en Mathlib)"
+    auditoria: verification/N01/registros/axiomas.txt
+  TEST:
+    estado: REPRODUCED
+    resultado: "30/30 (N01) además de 2122/2122 (F01)"
+    incluye:
+      - "lectura frente al resultado analítico exacto (f1, f2, f6), f1 exacto bit a bit"
+      - "frecuencia no entera (333 333,33… Hz); truncado con aviso; rechazos por contrato"
+      - "mutaciones detectadas: sin calibración, en voltios (×10⁻⁶), big-endian, orientación"
+      - "contraejemplo Float64 real: (x·0,1)·1e-6 ≠ x·(0,1·1e-6) para 24 606 de 65 536 valores Int16 (p. ej. x = −32766)"
+    registro: verification/N01/registros/julia_test.log
+  CROSS:
+    estado: REPRODUCED
+    referencia: "MNE-Python 1.13.2 (read_raw_brainvision), NumPy 2.5.5"
+    tolerancia: "rtol 1e-12, atol 0 (fijada antes de comparar)"
+    resultados: verification/N01/cross_mne.json
+    resumen:
+      f1_float32: "sin discrepancia (Julia = MNE = analítico, bit a bit)"
+      f2_int16: "sin discrepancia (bit a bit en estos valores)"
+      f3_truncado: "diferencia metodológica: mismos datos (3 muestras); Julia avisa, MNE no emite aviso"
+      f4_vectorizado: "diferencia metodológica: el contrato lo rechaza; MNE lo lee correctamente"
+      f5_milivoltios: "diferencia metodológica: el contrato lo rechaza; MNE convierte mV"
+      f6_fs_no_entera: "sin discrepancia (misma fs no entera)"
+  BENCH:
+    estado: REPRODUCED
+    comando: julia --project=julia julia/scripts/bench_n01.jl
+    datos: "INT_16 sintético, 31 × 500 000 (29,6 MiB)"
+    resultados: verification/N01/bench_julia.json
+    hallazgo: >-
+      La lectura completa asigna ~177 MiB para un archivo de 29,6 MiB: la
+      decodificación copia los datos (ltoh.(…) crea un vector aunque el equipo ya
+      sea little-endian) y la calibración a Float64 cuadruplica el tamaño.
+      Optimización PROPUESTA, no aplicada: exige volver a pasar TEST y CROSS.
+    advertencias:
+      - "una máquina (Apple M2 Ultra), un hilo; I/O desde la caché del sistema operativo"
+      - "no se compara con MNE: medir dos lectores distintos no es comparar lenguajes"
+
+correspondencia_formal_implementacion:
+  estado: INSPECTED
+  descripcion: >-
+    Las demostraciones Lean tratan posiciones de bytes, muestras completas y la
+    calibración en ℝ. El lector Julia usa esas mismas fórmulas (por lectura de
+    código y por TEST), pero no hay prueba formal de que las implemente, y en
+    Float64 la asociatividad de la calibración no se cumple siempre.
+
+limitaciones:
+  - "solo ficheros sintéticos pequeños; ningún registro real"
+  - "marcadores (.vmrk), BIDS (sidecars, channels.tsv) y codificaciones Latin-1 quedan fuera"
+  - "las diferencias con MNE son decisiones de contrato, no errores de MNE"
+
+aplicacion_posterior: [N02, N03]
+estado_ejecucion: REPRODUCED
+aceptacion_cientifica: pendiente

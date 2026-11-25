@@ -1,0 +1,29 @@
+{
+ "fichero": "f4_vectorizado",
+ "C": 3,
+ "fs_Hz": 500.0,
+ "fs_exacta": "500/1",
+ "rechazo_julia": "orientación VECTORIZED",
+ "N": 4,
+ "unidad_salida": "µV",
+ "datos_uV": [
+  [
+   1.0,
+   4.0,
+   7.0,
+   10.0
+  ],
+  [
+   2.0,
+   5.0,
+   8.0,
+   11.0
+  ],
+  [
+   3.0,
+   6.0,
+   9.0,
+   12.0
+  ]
+ ]
+}
