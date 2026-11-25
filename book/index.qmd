@@ -11,7 +11,9 @@ title: "Presentación"
 LEANLAB es un libro abierto de autoformación sobre esa pregunta. Su objetivo es aprender a **construir y justificar la confianza en el software científico** combinando cuatro tipos de evidencia: pruebas de software, demostración formal, validación entre implementaciones independientes e ingeniería de rendimiento.
 
 ::: {.lema}
-*Specify · Implement · Test · Prove · Compare · Optimize · Understand*
+**Especificar · Implementar · Probar · Demostrar · Comparar · Optimizar · Comprender**
+
+[*Specify · Implement · Test · Prove · Compare · Optimize · Understand*]{.lema-original}
 :::
 
 ## Cuatro pilares
@@ -21,7 +23,7 @@ Cada pilar responde a una pregunta distinta. Ninguno sustituye a los demás y ni
 :::: {.pilares}
 
 ::: {.pilar .p-test}
-[TEST]{.etiqueta} · [Software testing]{.nombre}
+[TEST]{.etiqueta} · [Pruebas de software]{.nombre} [(*software testing*)]{.original}
 
 ¿Se comporta la implementación como esperamos en los casos ensayados?
 
@@ -29,7 +31,7 @@ Cada pilar responde a una pregunta distinta. Ninguno sustituye a los demás y ni
 :::
 
 ::: {.pilar .p-proof}
-[PROOF]{.etiqueta} · [Formal verification]{.nombre}
+[PROOF]{.etiqueta} · [Verificación formal]{.nombre} [(*formal verification*)]{.original}
 
 ¿Qué propiedades podemos demostrar para todas las entradas que cumplen hipótesis explícitas?
 
@@ -37,7 +39,7 @@ Cada pilar responde a una pregunta distinta. Ninguno sustituye a los demás y ni
 :::
 
 ::: {.pilar .p-cross}
-[CROSS]{.etiqueta} · [Cross-implementation validation]{.nombre}
+[CROSS]{.etiqueta} · [Validación entre implementaciones]{.nombre} [(*cross-implementation validation*)]{.original}
 
 ¿Coinciden implementaciones independientes dentro de tolerancias justificadas de antemano?
 
@@ -45,7 +47,7 @@ Cada pilar responde a una pregunta distinta. Ninguno sustituye a los demás y ni
 :::
 
 ::: {.pilar .p-bench}
-[BENCH]{.etiqueta} · [Performance engineering]{.nombre}
+[BENCH]{.etiqueta} · [Ingeniería del rendimiento]{.nombre} [(*performance engineering*)]{.original}
 
 ¿Qué recursos consume el algoritmo y por qué?
 
@@ -56,9 +58,9 @@ Cada pilar responde a una pregunta distinta. Ninguno sustituye a los demás y ni
 
 ## Cómo está organizado
 
-- **Foundations.** Conocimiento general y reutilizable. Se puede estudiar sin conocer ninguna aplicación concreta. Sus capítulos se identifican como F01, F02…
-- **Applications.** Los fundamentos aplicados a problemas científicos reales, siempre con datos sintéticos o públicos. La primera aplicación es el procesamiento de EEG de [NeuroMIND](https://me1catrr.github.io/NeuroMIND/), con capítulos N01, N02…
-- **Code Studio.** Componentes para explorar el código, las demostraciones y las evidencias. Se construirán poco a poco, a medida que los necesite cada capítulo, y siempre a partir de ejecuciones reales.
+- **Fundamentos** (*Foundations*). Conocimiento general y reutilizable. Se puede estudiar sin conocer ninguna aplicación concreta. Sus capítulos se identifican como F01, F02…
+- **Aplicaciones** (*Applications*). Los fundamentos aplicados a problemas científicos reales, siempre con datos sintéticos o públicos. La primera aplicación es el procesamiento de EEG de [NeuroMIND](https://me1catrr.github.io/NeuroMIND/), con capítulos N01, N02…
+- **Laboratorio de código** (*Code Studio*). Componentes para explorar el código, las demostraciones y las evidencias. Se construirán poco a poco, a medida que los necesite cada capítulo, y siempre a partir de ejecuciones reales.
 
 La [declaración metodológica](metodologia.qmd) recoge los principios que rigen todo el libro.
 

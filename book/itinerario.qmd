@@ -4,7 +4,7 @@ title: "Itinerario"
 
 El itinerario es **provisional**. Ningún capítulo está publicado todavía. Cada capítulo tiene un identificador permanente (F01, N01…). La numeración visible (F01/{{< meta editorial.foundations >}}) muestra la posición dentro del bloque, y su total puede cambiar.
 
-## Foundations
+## Fundamentos (*Foundations*)
 
 Conocimiento general sobre verificación de software científico. Se puede estudiar sin conocer ninguna aplicación.
 
@@ -19,11 +19,11 @@ Conocimiento general sobre verificación de software científico. Se puede estud
 | F07/{{< meta editorial.foundations >}} | Rendimiento, perfilado, memoria y calidad | [JuliaDo](https://me1catrr.github.io/juliado/) (rendimiento) | [Pendiente]{.estado} |
 | F08/{{< meta editorial.foundations >}} | Reproducibilidad, integración continua, trazabilidad y desarrollo asistido por IA | [ClaudeDo](https://me1catrr.github.io/claudedo/) | [Pendiente]{.estado} |
 
-: Foundations. {#tbl-foundations}
+: Fundamentos. {#tbl-foundations}
 
 **F01** girará en torno a un ejemplo pequeño: la correspondencia entre la posición de una muestra en un archivo binario multicanal y su lugar en una matriz canales × muestras. En ese ejemplo aparecen los índices en base cero (Lean, NumPy) y en base uno (Julia), el almacenamiento por columnas (Julia) o por filas (NumPy) y la diferencia entre demostrar una propiedad y comprobar que una implementación la cumple.
 
-## Applications · NeuroMIND (EEG)
+## Aplicaciones · NeuroMIND (EEG)
 
 La primera aplicación estudia las etapas del procesamiento de EEG de [NeuroMIND](https://me1catrr.github.io/NeuroMIND/) [@gorgolewski2016brain; @appelhoff2019mnebids], siempre con **datos sintéticos**. Su código se cita, pero no se redistribuye.
 
@@ -40,7 +40,7 @@ La primera aplicación estudia las etapas del procesamiento de EEG de [NeuroMIND
 | N09/{{< meta editorial.neuromind >}} | Subrogados y control de la FDR [@benjamini1995controlling] | [Pendiente]{.estado} |
 | N10/{{< meta editorial.neuromind >}} | Integración del pipeline | [Pendiente]{.estado} |
 
-: Applications · NeuroMIND. {#tbl-neuromind}
+: Aplicaciones · NeuroMIND. {#tbl-neuromind}
 
 ## Aplicaciones futuras
 
@@ -50,6 +50,6 @@ Por ahora solo existen como fichas de alcance:
 - **SMARTBRIDGES** (S01…): monitorización estructural;
 - aplicaciones docentes de resistencia de materiales, dinámica estructural y métodos numéricos.
 
-## Code Studio
+## Laboratorio de código (*Code Studio*)
 
 Los componentes interactivos (visor de demostraciones, comparadores, visores de residuos y de rendimiento) se desarrollarán **uno a uno**, cuando los necesite un capítulo concreto. Siempre se alimentarán de datos generados por ejecuciones reales.

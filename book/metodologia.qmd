@@ -36,7 +36,7 @@ LEANLAB distingue cuatro tipos de validación:
 - **metodológica**: el método es adecuado para la pregunta;
 - **científica o clínica**: el resultado es válido para el fenómeno real.
 
-Este libro trabaja sobre todo en las tres primeras y **no** se pronuncia sobre la validez clínica. El pilar CROSS, *Cross-implementation validation*, no debe confundirse con la validación cruzada estadística de modelos.
+Este libro trabaja sobre todo en las tres primeras y **no** se pronuncia sobre la validez clínica. El pilar CROSS, validación entre implementaciones (*cross-implementation validation*), no debe confundirse con la validación cruzada estadística de modelos.
 
 ### Las referencias externas no son la verdad
 
