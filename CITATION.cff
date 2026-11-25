@@ -1,0 +1,32 @@
+cff-version: 1.2.0
+message: "Si usas este material, cítalo con los metadatos de este fichero."
+title: "LEANLAB: Scientific Software Verification & Engineering"
+abstract: >-
+  Libro abierto de autoformación sobre cómo construir y justificar la confianza
+  en el software científico mediante cuatro tipos de evidencia: pruebas de
+  software (TEST), demostración formal con Lean 4 y Mathlib (PROOF), validación
+  entre implementaciones independientes (CROSS) e ingeniería de rendimiento
+  (BENCH). Primera aplicación: procesamiento de EEG con datos sintéticos.
+authors:
+  - family-names: Castro Triguero
+    given-names: Rafael
+    affiliation: Universidad de Córdoba
+    # orcid: "https://orcid.org/0000-0000-0000-0000"
+version: 0.1.0
+# date-released: añadir al publicar la primera versión etiquetada (AAAA-MM-DD).
+# doi: añadir el DOI de Zenodo cuando exista.
+# Licencia del código original. Los textos y figuras van bajo CC-BY-SA-4.0
+# (véase LICENSE-CONTENIDO); en CFF una lista de licencias se interpretaría
+# como alternativas.
+license: MIT
+url: "https://me1catrr.github.io/leanlab/"
+repository-code: "https://github.com/me1catrr/leanlab"
+keywords:
+  - scientific software
+  - software testing
+  - formal verification
+  - Lean 4
+  - Julia
+  - cross-implementation validation
+  - performance engineering
+  - EEG

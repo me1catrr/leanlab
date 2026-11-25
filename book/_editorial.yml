@@ -1,0 +1,8 @@
+# Configuración editorial central de LEANLAB.
+# Los totales son PROVISIONALES y solo se usan en la representación editorial
+# (F01/08, N01/10). Nunca forman parte de un identificador, una ruta, una
+# referencia cruzada ni una ficha de evidencia. Uso: {{< meta editorial.foundations >}}
+editorial:
+  version: "0.1"
+  foundations: "08"
+  neuromind: "10"

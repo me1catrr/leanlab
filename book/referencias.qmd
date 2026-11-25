@@ -1,0 +1,8 @@
+---
+title: "Referencias"
+---
+
+Solo se incluyen referencias cuyos metadatos se han comprobado mediante el DOI, Crossref o la página del editor. Que un DOI resuelva no implica acceso abierto: algunas de estas publicaciones son de pago y se citan por su relevancia.
+
+::: {#refs}
+:::

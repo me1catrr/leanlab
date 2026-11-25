@@ -1,0 +1,19 @@
+# Material interno: nunca se versiona ni se publica
+/docs/
+/materiales/
+/interno/
+/LEANLAB_PLAN_MAESTRO.md
+
+# Configuración local de agentes
+/.claude/settings.local.json
+/.claude/.cc-writes/
+/.claude/launch.json
+
+# Quarto
+/book/_book/
+/book/.quarto/
+/.quarto/
+*_files/
+
+# Sistema
+.DS_Store

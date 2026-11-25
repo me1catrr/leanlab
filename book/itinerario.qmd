@@ -1,0 +1,55 @@
+---
+title: "Itinerario"
+---
+
+El itinerario es **provisional**. Ningún capítulo está publicado todavía. Cada capítulo tiene un identificador permanente (F01, N01…). La numeración visible (F01/{{< meta editorial.foundations >}}) muestra la posición dentro del bloque, y su total puede cambiar.
+
+## Foundations
+
+Conocimiento general sobre verificación de software científico. Se puede estudiar sin conocer ninguna aplicación.
+
+| Capítulo | Título provisional | Enlaza a (en lugar de repetir) | Estado |
+|---|---|---|---|
+| F01/{{< meta editorial.foundations >}} | ¿Cómo sabemos que nuestro código científico es correcto? | [ClaudeDo](https://me1catrr.github.io/claudedo/) · [Resonancia](https://me1catrr.github.io/resonancia/) (entorno) | [Pendiente]{.estado} |
+| F02/{{< meta editorial.foundations >}} | Contratos, tipos, especificaciones e invariantes | [JuliaDo](https://me1catrr.github.io/juliado/) (tipos y despacho múltiple) | [Pendiente]{.estado} |
+| F03/{{< meta editorial.foundations >}} | Pruebas unitarias, generativas, metamórficas y de mutación | [JuliaDo](https://me1catrr.github.io/juliado/) (`Test`) | [Pendiente]{.estado} |
+| F04/{{< meta editorial.foundations >}} | Lean 4 y Mathlib: demostraciones y algoritmos verificados | — | [Pendiente]{.estado} |
+| F05/{{< meta editorial.foundations >}} | Aritmética exacta frente a punto flotante | — | [Pendiente]{.estado} |
+| F06/{{< meta editorial.foundations >}} | Validación entre implementaciones: oráculos, protocolos y discrepancias | [NeuroRiemann](https://me1catrr.github.io/neuroriemann/) (validación Julia–Python) | [Pendiente]{.estado} |
+| F07/{{< meta editorial.foundations >}} | Rendimiento, perfilado, memoria y calidad | [JuliaDo](https://me1catrr.github.io/juliado/) (rendimiento) | [Pendiente]{.estado} |
+| F08/{{< meta editorial.foundations >}} | Reproducibilidad, integración continua, trazabilidad y desarrollo asistido por IA | [ClaudeDo](https://me1catrr.github.io/claudedo/) | [Pendiente]{.estado} |
+
+: Foundations. {#tbl-foundations}
+
+**F01** girará en torno a un ejemplo pequeño: la correspondencia entre la posición de una muestra en un archivo binario multicanal y su lugar en una matriz canales × muestras. En ese ejemplo aparecen los índices en base cero (Lean, NumPy) y en base uno (Julia), el almacenamiento por columnas (Julia) o por filas (NumPy) y la diferencia entre demostrar una propiedad y comprobar que una implementación la cumple.
+
+## Applications · NeuroMIND (EEG)
+
+La primera aplicación estudia las etapas del procesamiento de EEG de [NeuroMIND](https://me1catrr.github.io/NeuroMIND/) [@gorgolewski2016brain; @appelhoff2019mnebids], siempre con **datos sintéticos**. Su código se cita, pero no se redistribuye.
+
+| Capítulo | Caso | Estado |
+|---|---|---|
+| N01/{{< meta editorial.neuromind >}} | Carga BIDS/BrainVision: dimensiones, orientación, unidades (µV y V) y calibración | [Pendiente]{.estado} |
+| N02/{{< meta editorial.neuromind >}} | Control de calidad | [Pendiente]{.estado} |
+| N03/{{< meta editorial.neuromind >}} | Filtrado | [Pendiente]{.estado} |
+| N04/{{< meta editorial.neuromind >}} | ICA | [Pendiente]{.estado} |
+| N05/{{< meta editorial.neuromind >}} | Segmentación | [Pendiente]{.estado} |
+| N06/{{< meta editorial.neuromind >}} | Espectro | [Pendiente]{.estado} |
+| N07/{{< meta editorial.neuromind >}} | Conectividad (wPLI) | [Pendiente]{.estado} |
+| N08/{{< meta editorial.neuromind >}} | Redes | [Pendiente]{.estado} |
+| N09/{{< meta editorial.neuromind >}} | Subrogados y control de la FDR [@benjamini1995controlling] | [Pendiente]{.estado} |
+| N10/{{< meta editorial.neuromind >}} | Integración del pipeline | [Pendiente]{.estado} |
+
+: Applications · NeuroMIND. {#tbl-neuromind}
+
+## Aplicaciones futuras
+
+Por ahora solo existen como fichas de alcance:
+
+- **BRINCADIANO** (B01…): actigrafía y exposición lumínica;
+- **SMARTBRIDGES** (S01…): monitorización estructural;
+- aplicaciones docentes de resistencia de materiales, dinámica estructural y métodos numéricos.
+
+## Code Studio
+
+Los componentes interactivos (visor de demostraciones, comparadores, visores de residuos y de rendimiento) se desarrollarán **uno a uno**, cuando los necesite un capítulo concreto. Siempre se alimentarán de datos generados por ejecuciones reales.

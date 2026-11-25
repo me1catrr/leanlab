@@ -1,0 +1,73 @@
+project:
+  type: book
+  output-dir: _book
+  # Lista explícita: Quarto solo renderiza estas rutas.
+  render:
+    - index.qmd
+    - metodologia.qmd
+    - itinerario.qmd
+    - hoja-de-ruta.qmd
+    - referencias.qmd
+
+lang: es
+
+# Totales editoriales provisionales (F01/08, N01/10). Fuente única: _editorial.yml.
+metadata-files:
+  - _editorial.yml
+
+book:
+  title: "LEANLAB"
+  subtitle: "Scientific Software Verification & Engineering"
+  description: "Libro abierto sobre cómo construir y justificar la confianza en el software científico: pruebas, demostración formal con Lean 4, validación entre implementaciones y rendimiento."
+  author: "Rafael Castro Triguero"
+  site-url: https://me1catrr.github.io/leanlab/
+  repo-url: https://github.com/me1catrr/leanlab
+  repo-actions: [issue]
+  license: "CC BY-SA 4.0"
+  search: true
+  favicon: assets/img/marca.svg
+  sidebar:
+    style: docked
+    logo: assets/img/marca.svg
+    logo-alt: "LEANLAB"
+  page-footer:
+    left: "© 2026 Rafael Castro Triguero · Universidad de Córdoba"
+    right: "Texto [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.es) · Código MIT"
+  chapters:
+    - index.qmd
+    - metodologia.qmd
+    - itinerario.qmd
+    - hoja-de-ruta.qmd
+    - referencias.qmd
+
+bibliography: references.bib
+link-citations: true
+citations-hover: true
+
+crossref:
+  fig-title: "Figura"
+  tbl-title: "Tabla"
+  eq-prefix: "ecuación"
+  thm-title: "Teorema"
+  def-title: "Definición"
+  exm-title: "Ejemplo"
+
+execute:
+  enabled: false
+
+format:
+  html:
+    theme:
+      - cosmo
+      - assets/scss/marca.scss
+    css: assets/css/styles.css
+    toc: true
+    toc-title: "En esta página"
+    # Sin numeración automática: los capítulos se identifican como F01, N01…
+    number-sections: false
+    reference-location: margin
+    code-tools: false
+    grid:
+      sidebar-width: 270px
+      body-width: 860px
+      margin-width: 270px

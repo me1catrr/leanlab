@@ -1,0 +1,99 @@
+---
+title: "Presentación"
+---
+
+::: {.estado-obra}
+**Versión editorial {{< meta editorial.version >}} · en construcción.** Por ahora esta edición contiene la presentación, la declaración metodológica, el itinerario y la hoja de ruta. **No hay todavía ningún capítulo publicado**, y ningún resultado experimental se presenta como realizado. En el [itinerario](itinerario.qmd) cada capítulo aparece con su estado.
+:::
+
+**¿Cómo sabemos que nuestro código científico es correcto, eficiente, reproducible y adecuado para su propósito?**
+
+LEANLAB es un libro abierto de autoformación sobre esa pregunta. Su objetivo es aprender a **construir y justificar la confianza en el software científico** combinando cuatro tipos de evidencia: pruebas de software, demostración formal, validación entre implementaciones independientes e ingeniería de rendimiento.
+
+::: {.lema}
+*Specify · Implement · Test · Prove · Compare · Optimize · Understand*
+:::
+
+## Cuatro pilares
+
+Cada pilar responde a una pregunta distinta. Ninguno sustituye a los demás y ninguno, ni siquiera la demostración formal, garantiza por sí solo la validez científica de un resultado.
+
+:::: {.pilares}
+
+::: {.pilar .p-test}
+[TEST]{.etiqueta} · [Software testing]{.nombre}
+
+¿Se comporta la implementación como esperamos en los casos ensayados?
+
+[Julia `Test` · pytest · property-based testing · mutation testing · JET · Aqua]{.herramientas}
+:::
+
+::: {.pilar .p-proof}
+[PROOF]{.etiqueta} · [Formal verification]{.nombre}
+
+¿Qué propiedades podemos demostrar para todas las entradas que cumplen hipótesis explícitas?
+
+[Lean 4 · Mathlib · auditoría de axiomas]{.herramientas}
+:::
+
+::: {.pilar .p-cross}
+[CROSS]{.etiqueta} · [Cross-implementation validation]{.nombre}
+
+¿Coinciden implementaciones independientes dentro de tolerancias justificadas de antemano?
+
+[Julia · Python/NumPy · MNE-Python]{.herramientas}
+:::
+
+::: {.pilar .p-bench}
+[BENCH]{.etiqueta} · [Performance engineering]{.nombre}
+
+¿Qué recursos consume el algoritmo y por qué?
+
+[BenchmarkTools · `Profile` · asignaciones · escalabilidad]{.herramientas}
+:::
+
+::::
+
+## Cómo está organizado
+
+- **Foundations.** Conocimiento general y reutilizable. Se puede estudiar sin conocer ninguna aplicación concreta. Sus capítulos se identifican como F01, F02…
+- **Applications.** Los fundamentos aplicados a problemas científicos reales, siempre con datos sintéticos o públicos. La primera aplicación es el procesamiento de EEG de [NeuroMIND](https://me1catrr.github.io/NeuroMIND/), con capítulos N01, N02…
+- **Code Studio.** Componentes para explorar el código, las demostraciones y las evidencias. Se construirán poco a poco, a medida que los necesite cada capítulo, y siempre a partir de ejecuciones reales.
+
+La [declaración metodológica](metodologia.qmd) recoge los principios que rigen todo el libro.
+
+## Un libro dentro de un ecosistema
+
+LEANLAB se apoya en otros libros abiertos del mismo autor. Los enlaza en lugar de repetir su contenido.
+
+:::: {.ecosistema}
+::: {}
+[[JuliaDo](https://me1catrr.github.io/juliado/)]{.proyecto}
+
+[Programación científica con Julia]{.que}
+:::
+::: {}
+[[ClaudeDo](https://me1catrr.github.io/claudedo/)]{.proyecto}
+
+[Desarrollo asistido por IA]{.que}
+:::
+::: {}
+[[Resonancia](https://me1catrr.github.io/resonancia/)]{.proyecto}
+
+[Señales, vibraciones e instrumentación]{.que}
+:::
+::: {}
+[[NeuroRiemann](https://me1catrr.github.io/neuroriemann/)]{.proyecto}
+
+[Geometría riemanniana y EEG]{.que}
+:::
+::: {}
+[[NeuroMIND](https://me1catrr.github.io/NeuroMIND/)]{.proyecto}
+
+[Primera aplicación: EEG]{.que}
+:::
+::::
+
+## Licencia
+
+El texto y las figuras originales se publican bajo [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.es) y el código original bajo licencia MIT. Las fuentes están en [github.com/me1catrr/leanlab](https://github.com/me1catrr/leanlab).

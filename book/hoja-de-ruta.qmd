@@ -1,0 +1,25 @@
+---
+title: "Hoja de ruta"
+---
+
+LEANLAB avanza por **sesiones** de alcance cerrado. Cada una termina con un informe y una decisión humana antes de empezar la siguiente. Esta hoja de ruta es orientativa.
+
+| Sesión | Contenido | Estado |
+|---|---|---|
+| S0 | Diagnóstico, normas para agentes y organización de materiales | [Completada]{.estado .hecho} |
+| S1 | Preservación y versionado de demostraciones Lean previas (subrogados, Benjamini–Hochberg y wPLI) | [Completada (en local, privada)]{.estado .hecho} |
+| S2 | Repositorio público y edición mínima del libro | [En curso: esta edición]{.estado} |
+| S3 | Foundations · F01/{{< meta editorial.foundations >}} | [Pendiente]{.estado} |
+| S4 | NeuroMIND · N01/{{< meta editorial.neuromind >}} (carga BrainVision) | [Pendiente]{.estado} |
+| S5 | Code Studio: primeros componentes | [Pendiente]{.estado} |
+| S6 | Ampliación de NeuroMIND (filtrado, segmentación, espectro, conectividad, subrogados) | [Pendiente]{.estado} |
+| S7+ | Transferencia a BRINCADIANO, SMARTBRIDGES y docencia | [Futuro]{.estado} |
+
+: Sesiones de LEANLAB. {#tbl-sesiones}
+
+## Lo que esta edición todavía no contiene
+
+- **Capítulos.** Todos están pendientes.
+- **Resultados.** Todavía no se publica ninguna demostración, prueba, comparación ni medición de rendimiento.
+- **Demostraciones Lean previas.** Las de subrogados, Benjamini–Hochberg y wPLI se publicarán cuando exista una versión publicable con historial limpio, y después de comprobar que es equivalente al original preservado.
+- **Edición PDF.** Prevista con Typst en una segunda fase editorial.

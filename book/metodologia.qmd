@@ -1,0 +1,94 @@
+---
+title: "Declaración metodológica"
+---
+
+Este capítulo recoge los principios que gobiernan todo LEANLAB. No es un tutorial: es el contrato que deben cumplir los capítulos posteriores.
+
+## Las preguntas antes que las herramientas
+
+Las buenas prácticas de computación científica, como el control de versiones, las pruebas automáticas, la modularidad y la reproducibilidad, están bien documentadas [@wilson2014best; @wilson2017good]. LEANLAB parte de ellas y añade una pregunta incómoda: **¿qué tipo de evidencia respalda cada afirmación que hacemos sobre nuestro código?**
+
+| Pilar | Pregunta | Qué *no* responde |
+|---|---|---|
+| TEST | ¿Funciona en los casos ensayados? | Los casos no ensayados |
+| PROOF | ¿Qué propiedades se cumplen para todas las entradas, bajo hipótesis explícitas? | Si el código ejecutable implementa esa especificación |
+| CROSS | ¿Concuerdan implementaciones independientes? | Si ambas son correctas |
+| BENCH | ¿Cuánto cuesta y por qué? | Si el resultado es correcto |
+
+: Cada pilar responde a una pregunta y deja otras abiertas. {#tbl-pilares}
+
+## Distinciones obligatorias
+
+### Demostrar no es verificar la implementación
+
+Un teorema en Lean 4 con Mathlib [@mathlib2020] establece una propiedad de un **modelo formal**. No prueba que la función Julia o Python que usamos en la práctica implemente ese modelo. Cada capítulo debe declarar la **correspondencia** entre la especificación formal, el modelo Lean y el código ejecutable, e indicar cómo se ha comprobado: por lectura, numéricamente o formalmente.
+
+### Aritmética exacta frente a punto flotante
+
+Una propiedad demostrada sobre ℕ, ℚ o ℝ no se traslada automáticamente a `Float32`, `Float64` ni a enteros de tamaño fijo. Hay que considerar el redondeo, la cancelación, el *overflow*, NaN, Inf, los denominadores nulos y las tolerancias absolutas y relativas [@goldberg1991what].
+
+### Tipos de validación
+
+LEANLAB distingue cuatro tipos de validación:
+
+- **diferencial**: implementaciones distintas producen el mismo resultado;
+- **numérica**: el error está dentro de una tolerancia justificada;
+- **metodológica**: el método es adecuado para la pregunta;
+- **científica o clínica**: el resultado es válido para el fenómeno real.
+
+Este libro trabaja sobre todo en las tres primeras y **no** se pronuncia sobre la validez clínica. El pilar CROSS, *Cross-implementation validation*, no debe confundirse con la validación cruzada estadística de modelos.
+
+### Las referencias externas no son la verdad
+
+Bibliotecas como MNE-Python [@gramfort2013meg] o NumPy [@harris2020array] son referencias externas valiosas e independientes. Pero una coincidencia entre dos implementaciones no demuestra que ninguna de las dos sea correcta.
+
+### Fuentes complementarias de evidencia
+
+No existe una jerarquía universal de oráculos. Según la afirmación científica, conviene recurrir a una o varias de estas fuentes:
+
+- una solución analítica;
+- datos sintéticos con un resultado conocido;
+- una implementación independiente;
+- una biblioteca de referencia;
+- la experimentación.
+
+Una solución analítica es excelente para comprobar un algoritmo matemático. Para evaluar su validez física puede hacer falta una medida experimental.
+
+### El rendimiento no es una competición entre lenguajes
+
+BENCH distingue varias dimensiones:
+
+- latencia de compilación;
+- ejecución en caliente, con mediana, dispersión y cuantiles;
+- memoria y asignaciones;
+- entrada y salida (I/O) y copias;
+- escalabilidad.
+
+Precisión, legibilidad, mantenibilidad y reproducibilidad se evalúan aparte, con criterios explícitos. NumPy y MNE delegan en componentes compilados. Comparar bibliotecas no es comparar lenguajes [@bezanson2017julia], y toda medición va precedida de una validación del resultado.
+
+## Estado de la evidencia
+
+Cada evidencia tiene **un estado de ejecución**:
+
+| Estado | Significado |
+|---|---|
+| `PROPOSED` | Experimento o propiedad por estudiar |
+| `ILLUSTRATIVE` | Maqueta o simulación didáctica, nunca un resultado |
+| `REPORTED` | Resultado comunicado, todavía no comprobado |
+| `INSPECTED` | Evidencia existente, inspeccionada pero no reejecutada |
+| `REPRODUCED` | Resultado reproducido mediante una ejecución registrada |
+| `FAILED` | Comprobación realizada sin éxito |
+
+: Estados de ejecución de una evidencia. {#tbl-estados}
+
+La **aceptación científica** es una dimensión aparte, con cuatro valores: *pendiente*, *requiere revisión*, *aceptada* y *rechazada*. Una evidencia reproducida puede seguir pendiente de aceptación.
+
+LEANLAB **no publica porcentajes globales de verificación**. En su lugar muestra qué propiedades concretas se han comprobado, con qué evidencia y qué queda pendiente.
+
+## Reglas de publicación
+
+- Las cifras, los perfiles, las trazas y los objetivos de demostración que se presentan como reales proceden de ejecuciones registradas, con su entorno, sus versiones, su comando y sus huellas SHA-256.
+- Las simulaciones interactivas se rotulan como **didácticas**.
+- No se publican datos clínicos, identificadores de participantes, rutas privadas ni código sin una licencia compatible. Los ejemplos usan datos sintéticos o públicos con licencia compatible.
+- Las tolerancias se fijan **antes** de comparar. Si cambian después, se registra una nueva versión del protocolo.
+- Las herramientas de IA ayudan a proponer, redactar y revisar, pero **no son garantes de corrección**. Las garantías proceden de las pruebas, del núcleo de Lean, de las especificaciones y de las evidencias reproducibles.
