@@ -1,0 +1,38 @@
+# Protocolo de N02 · Control de calidad por canal — versión 1
+# Fijado ANTES de ejecutar ninguna comparación.
+
+version: 1
+fecha: 2026-11-26
+datos: "solo matrices sintéticas generadas por scripts/n02_datos.py (ondas cuadradas ±A, constantes y un NaN); deterministas"
+
+contrato_julia:                  # LeanlabJulia.N02Calidad.control_calidad
+  entrada: "X canales × muestras en µV (Float64); no se modifica (N02-C06)"
+  N02-C01: "no válido: el canal contiene algún NaN o Inf; se excluye del resto"
+  N02-C02: "plano: rango pico a pico < 1.0 µV"
+  N02-C03: "saturado: fracción de muestras con |x| ≥ 1000 µV ≥ 0.01"
+  N02-C04: >-
+    atípico: z-score de la desviación típica POBLACIONAL de cada canal, calculado
+    sobre los canales válidos y no planos, con media y desviación típica
+    POBLACIONALES (ddof = 0); |z| > 3.0. Si la desviación de las desviaciones es 0,
+    ningún canal se marca.
+  N02-C05: "etiquetas por canal: unión de las anteriores; canal malo si tiene alguna"
+
+oraculo_analitico: "scripts/n02_datos.py decide cada etiqueta con fracciones exactas (para z compara z² con 9)"
+
+referencias_externas:
+  numpy_scipy: "implementación independiente del mismo contrato en Python (numpy.std ddof=0, scipy.stats.zscore ddof=0)"
+  mne: "mne.preprocessing.annotate_amplitude(flat=1e-6 V, bad_percent=5, min_duration=0.002 s) solo para canales planos"
+  nota: "MNE define «plano» por ventanas; nuestro contrato, sobre el registro completo"
+
+conjuntos:
+  d1_mixto:         {C: 16, espera: "plano, saturado, no válido y atípico según el oráculo exacto"}
+  d2_ocho_canales:  {C: 8, espera: "un canal 45 veces mayor NO se marca como atípico (Samuelson: z² ≤ 7)"}
+  d3_once_canales:  {C: 11, espera: "diez canales iguales y uno un 2,5 % mayor: z = √10 > 3, se marca"}
+  d4_identicos:     {C: 12, espera: "todas las desviaciones iguales: ningún atípico; SciPy devuelve NaN (a clasificar)"}
+  d5_plano_parcial: {C: 12, espera: "canal plano la mitad del tiempo: no plano para el contrato; MNE lo marca (a clasificar)"}
+
+tolerancias:
+  metricas: {rtol: 1.0e-12, atol: 0.0}     # σ, rango, fracción, z
+  etiquetas: "igualdad exacta"
+
+clasificacion_discrepancias: [error, diferencia_metodologica, precision, referencia_no_comparable, pendiente]
