@@ -1,0 +1,39 @@
+# Protocolo de N03 · Filtrado — versión 1
+# Fijado ANTES de ejecutar ninguna comparación.
+
+version: 1
+fecha: 2026-11-27
+datos: "solo señales sintéticas deterministas definidas en scripts/n03_senales.py"
+
+parte_A_filtro_un_polo:
+  definicion: "y[n] = α·x[n] + (1 − α)·y[n − 1], y[−1] = y0, 0 < α ≤ 1"
+  oraculo_exacto: "lean: lake exe n03_filtro (aritmética racional exacta, ℚ)"
+  casos:
+    a1_exacto: {alfa: "1/4", x: "12 enteros fijos", y0: 0, espera: "Julia Rational{BigInt} = Lean ℚ, igualdad exacta"}
+    a2_largo:  {alfa: "1/10", N: 2000, x: "milésimas deterministas en [−1, 1]", y0: 0,
+                espera: "Float64 frente a exacto: se informa del error máximo absoluto y de su evolución con n"}
+  tolerancia_float64_frente_exacto: "error máximo absoluto ≤ 1e-12 (|x| ≤ 1); se informa siempre del valor medido"
+
+parte_B_butterworth:
+  diseno: "paso bajo Butterworth de orden 4, fs = 500 Hz, corte 40 Hz (−3 dB), secciones de segundo orden (SOS)"
+  implementaciones:
+    julia: "DSP.jl: digitalfilter(Lowpass(40), Butterworth(4); fs = 500)"
+    scipy: "scipy.signal.butter(4, 40, fs = 500, output = 'sos')"
+    mne: "mne.filter.create_filter(..., method = 'iir', iir_params = dict(order = 4, ftype = 'butter', output = 'sos'))"
+  comparaciones:
+    polos_ceros: {criterio: "mismos polos y ceros (como conjuntos)", tolerancia: {rtol: 1.0e-12}}
+    ganancia_dc_y_corte: {criterio: "|H(0)| = 1 y |H(40 Hz)| = 1/√2", tolerancia: {rtol: 1.0e-10}}
+    respuesta_frecuencia: {criterio: "|H(f)| en 512 frecuencias", tolerancia: {rtol: 1.0e-10, atol: 1.0e-14}}
+    salida_una_pasada: {criterio: "Julia filt frente a scipy sosfilt, condiciones iniciales nulas, señal b1", tolerancia: "máx |Δy| ≤ 1e-9 · máx |x|"}
+    estabilidad: "todos los polos con |p| < 1"
+    secciones: "el orden y el emparejamiento de las secciones SOS pueden diferir; se clasifica, no se exige igualdad"
+    fase_cero: >-
+      MNE filter_data(method = 'iir') aplica filtrado de fase cero (ida y vuelta) con su propio
+      relleno de bordes; se compara con DSP.jl filtfilt y se informa de la diferencia máxima en
+      todo el registro y en el 80 % central. Se espera una diferencia metodológica en los bordes.
+  senales:
+    b1: "x(t) = sin(2π·10t) + 0.5·sin(2π·60t) + 0.2·sin(2π·120t), fs = 500 Hz, N = 2000"
+    impulso: "delta de Kronecker, N = 400"
+
+informe: "error máximo, RMSE y residuos; clasificación de discrepancias"
+clasificacion_discrepancias: [error, diferencia_metodologica, precision, referencia_no_comparable, pendiente]
