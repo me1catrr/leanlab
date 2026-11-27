@@ -48,7 +48,7 @@
   },
   {
    "tipo": "precision",
-   "detalle": "los ceros reconstruidos desde las SOS con scipy.signal.sos2zpk difieren de −1 en 6.7e-09: el cero doble de cada sección es una raíz múltiple, mal condicionada; con los ceros que da directamente butter(…, output='zpk') la coincidencia es exacta"
+   "detalle": "los ceros reconstruidos desde las SOS con scipy.signal.sos2zpk difieren de −1 en 6.7e-09: el cero doble de cada sección es una raíz múltiple, mal condicionada; con los ceros que da directamente butter(…, output='zpk') la coincidencia es exacta. El efecto depende de la biblioteca LAPACK de la plataforma: no aparece en Linux (CI)"
   }
  ]
 }

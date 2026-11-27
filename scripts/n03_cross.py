@@ -111,7 +111,8 @@ def main() -> None:
         discrepancias.append({"tipo": "precision", "detalle":
             "los ceros reconstruidos desde las SOS con scipy.signal.sos2zpk difieren de −1 en "
             f"{bw['ceros_max_dif_sos2zpk']:.2g}: el cero doble de cada sección es una raíz múltiple, mal "
-            "condicionada; con los ceros que da directamente butter(…, output='zpk') la coincidencia es exacta"})
+            "condicionada; con los ceros que da directamente butter(…, output='zpk') la coincidencia es exacta. "
+            "El efecto depende de la biblioteca LAPACK de la plataforma: no aparece en Linux (CI)"})
     ceros_ok = bw["ceros_iguales"] or bw["ceros_iguales_zpk_directo"]
     ok = (bw["polos_iguales"] and ceros_ok and bw["H_dentro_tolerancia"]
           and bw["una_pasada_dentro_tolerancia"] and bw["estable"] and r["un_polo"]["a2_dentro_tolerancia"])

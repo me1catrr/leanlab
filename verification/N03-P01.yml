@@ -45,14 +45,14 @@ evidencias:
       - "mutantes detectados: α ↔ 1 − α; corte normalizado por fs en vez de por Nyquist; reinicio del estado en cada bloque"
     registro: verification/N03/registros/julia_test.log
   CROSS:
-    resumen: "DSP.jl = SciPy en polos, respuesta en frecuencia y salida (máx. 1,6e-15); MNE = SciPy en SOS; 2 diferencias metodológicas y 1 de precisión clasificadas"
+    resumen: "DSP.jl = SciPy en polos, respuesta en frecuencia y salida (máx. 1,6e-15); MNE = SciPy en SOS; 2 diferencias metodológicas y 1 de precisión (dependiente de la plataforma) clasificadas"
     estado: REPRODUCED
     referencias: "SciPy 1.18.1 (butter, sosfilt, sosfreqz, sos2zpk), MNE 1.13.2 (create_filter, filter_data), DSP.jl 0.8.7"
     resultados: verification/N03/cross.json
     discrepancias:
       - "diferencia metodológica: DSP.jl guarda la ganancia aparte; SciPy la integra en la primera sección"
       - "diferencia metodológica: fase cero con relleno de bordes distinto (máx. 0,031 en total, 1,8e-15 en el 80 % central)"
-      - "precisión: ceros recuperados con sos2zpk a 6,7e-9 de −1 (raíz doble mal condicionada); exactos con butter(output='zpk')"
+      - "precisión: ceros recuperados con sos2zpk a 6,7e-9 de −1 en macOS (raíz doble mal condicionada); exactos en Linux (CI) y con butter(output='zpk'): depende de LAPACK"
   BENCH:
     resumen: "Butterworth 2,3 veces más rápido por columnas (N × C); el filtro exacto en racionales, ~590 veces más lento que Float64"
     estado: REPRODUCED

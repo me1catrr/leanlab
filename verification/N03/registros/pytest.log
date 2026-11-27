@@ -37,6 +37,6 @@ python/tests/test_n02_cross.py::test_diferencias_metodologicas PASSED    [ 87%]
 python/tests/test_n03_cross.py::test_un_polo_float64_frente_a_exacto PASSED [ 90%]
 python/tests/test_n03_cross.py::test_butterworth_coincide PASSED         [ 93%]
 python/tests/test_n03_cross.py::test_discrepancias_clasificadas PASSED   [ 96%]
-python/tests/test_n03_cross.py::test_raiz_doble_mal_condicionada PASSED  [100%]
+python/tests/test_n03_cross.py::test_raiz_doble_acotada PASSED           [100%]
 
-============================== 32 passed in 1.41s ==============================
+============================== 32 passed in 1.63s ==============================

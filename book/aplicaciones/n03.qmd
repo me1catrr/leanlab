@@ -65,7 +65,7 @@ Las tres diferencias tienen explicación, y ninguna es un error:
 
 - **Representación de las SOS.** DSP.jl guarda la ganancia global aparte y SciPy la integra en la primera sección. Son el mismo filtro escrito de dos formas.
 - **Fase cero.** Filtrar ida y vuelta elimina el desfase, pero obliga a **rellenar los bordes**, y cada biblioteca lo hace a su manera. La diferencia es de 0,03 cerca de los extremos y de $10^{-15}$ en el 80 % central.
-- **Una raíz doble mal condicionada.** Cada sección tiene un cero **doble** en $z = -1$. Si se reconstruyen los ceros a partir de los coeficientes con `sos2zpk`, aparecen a $6{,}7\times 10^{-9}$ de $-1$, unas $10^{7}$ veces el redondeo. No es un fallo de ninguna biblioteca: una raíz múltiple amplifica las perturbaciones de los coeficientes, del orden de $\sqrt{\varepsilon}$. Los ceros que SciPy calcula directamente son exactamente $-1$.
+- **Una raíz doble mal condicionada.** Cada sección tiene un cero **doble** en $z = -1$. Si se reconstruyen los ceros a partir de los coeficientes con `sos2zpk`, aparecen a $6{,}7\times 10^{-9}$ de $-1$, unas $10^{7}$ veces el redondeo. No es un fallo de ninguna biblioteca: una raíz múltiple amplifica las perturbaciones de los coeficientes, del orden de $\sqrt{\varepsilon}$. Los ceros que SciPy calcula directamente son exactamente $-1$. Además, el efecto **depende de la plataforma**: en la integración continua (Linux), la misma llamada devuelve los ceros exactos. La biblioteca LAPACK que calcula las raíces no es la misma en macOS que en Linux, y una prueba que exigía ver el fenómeno falló en Linux hasta que se corrigió para comprobar solo lo invariante: que el error esté acotado.
 
 ::: {.callout-important}
 ## Una lección sobre las tolerancias

@@ -21,4 +21,4 @@
 }
 · diferencia_metodologica — representación de las SOS: DSP.jl guarda la ganancia global aparte y SciPy la integra en la primera sección; el orden y el emparejamiento de las secciones coinciden, y también los polos, la ganancia y la respuesta en frecuencia
 · diferencia_metodologica — filtrado de fase cero: MNE y DSP.jl rellenan los bordes de forma distinta; diferencia máxima 0.0305 en total y 1.78e-15 en el 80 % central
-· precision — los ceros reconstruidos desde las SOS con scipy.signal.sos2zpk difieren de −1 en 6.7e-09: el cero doble de cada sección es una raíz múltiple, mal condicionada; con los ceros que da directamente butter(…, output='zpk') la coincidencia es exacta
+· precision — los ceros reconstruidos desde las SOS con scipy.signal.sos2zpk difieren de −1 en 6.7e-09: el cero doble de cada sección es una raíz múltiple, mal condicionada; con los ceros que da directamente butter(…, output='zpk') la coincidencia es exacta. El efecto depende de la biblioteca LAPACK de la plataforma: no aparece en Linux (CI)
