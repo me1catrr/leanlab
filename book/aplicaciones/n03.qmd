@@ -1,0 +1,107 @@
+---
+title: "N03 · Filtrado"
+subtitle: "De una recurrencia demostrada a un Butterworth comparado"
+---
+
+::: {.ficha-cap}
+**N03/{{< meta editorial.neuromind >}}** · Aplicaciones · NeuroMIND (EEG) · Ficha **N03-P01** · Estado de la evidencia: [REPRODUCED]{.estado .hecho} · Aceptación científica: [pendiente]{.estado}
+:::
+
+Filtrar es quizá la operación más habitual en el procesamiento de señales, y también una de las más fáciles de aplicar sin entender del todo qué hace. Este capítulo sigue dos caminos complementarios:
+
+1. un filtro **sencillo**, el de un polo, cuyas propiedades se **demuestran** y cuya ejecución se compara con la aritmética **exacta**;
+2. un filtro **realista**, un Butterworth de orden 4, que no se demuestra, pero se **contrasta** con SciPy y MNE.
+
+La teoría de filtros FIR e IIR, el filtrado de fase cero y el diseño Butterworth se explican en [Resonancia](https://me1catrr.github.io/resonancia/) y en [JuliaDo](https://me1catrr.github.io/juliado/). Aquí la pregunta es otra: **¿cómo sabemos que el filtro hace lo que creemos?**
+
+::: {.callout-note}
+## Solo señales sintéticas
+
+Las señales las genera `scripts/n03_senales.py`. El protocolo de comparación (`verification/N03/protocolo.yml`) se registró **antes** de comparar.
+:::
+
+## Parte A · El filtro de un polo
+
+$$
+y[n] = \alpha\, x[n] + (1-\alpha)\, y[n-1], \qquad y[-1] = y_0, \qquad 0 < \alpha \le 1 .
+$$
+
+Es una media móvil exponencial: cada salida mezcla la entrada actual con la salida anterior.
+
+{{< include _n03-un-polo.md >}}
+
+### PROOF · Cuatro propiedades para todas las entradas
+
+Lean demuestra sobre $\mathbb{R}$:
+
+- **N03-P01 · Acotación (estabilidad BIBO).** Si $\lvert x[n]\rvert \le M$ para todo $n$ y $\lvert y_0 \rvert \le M$, entonces $\lvert y[n] \rvert \le M$ para todo $n$. La clave es que cada salida es una **combinación convexa** de dos valores acotados.
+- **N03-P02 · Causalidad.** La salida en $n$ solo depende de $x[0], \ldots, x[n]$.
+- **N03-P03 · Ganancia en continua.** Con entrada constante $c$ y $y_0 = c$, la salida es exactamente $c$.
+- **N03-P04 · Transitorio exacto.** Con entrada constante $c$: $\; y[n] - c = (1-\alpha)^{n+1}\,(y_0 - c)$.
+
+{{< include _n03-visor.md >}}
+
+### TEST y CROSS · Exacto frente a `Float64`
+
+El mismo filtro está escrito en Lean de forma **ejecutable sobre $\mathbb{Q}$** (`lake exe n03_filtro`). Para la entrada a1 ($\alpha = 1/4$, doce enteros), la salida exacta de Lean, por ejemplo $1,\ -5/4,\ 33/16,\ \ldots$, coincide **exactamente** con la de Julia usando `Rational{BigInt}`.
+
+Con la entrada a2 (2000 muestras, $\alpha = 1/10$) se compara `Float64` con el cálculo exacto. El error máximo es $1{,}4\times 10^{-16}$ y **no crece** con $n$. No es casualidad: la misma combinación convexa que garantiza la acotación hace que cada error de redondeo se **amortigüe** por el factor $1-\alpha < 1$ en lugar de acumularse. Esta explicación se apoya en la demostración, pero la cota del error en `Float64` **no** está demostrada formalmente.
+
+Las pruebas comprueban además las cuatro propiedades en 500 casos aleatorios en `Float64` y detectan errores típicos:
+
+{{< include _n03-mutaciones.md >}}
+
+## Parte B · Un Butterworth de orden 4
+
+Se diseña un paso bajo de orden 4 con $f_s = 500$ Hz y corte a 40 Hz ($-3$ dB), en secciones de segundo orden (SOS), con tres herramientas: DSP.jl, SciPy y MNE.
+
+En TEST, todos los polos tienen módulo menor que 1, de modo que el filtro es estable. Además, $\lvert H(0)\rvert = 1$ y $\lvert H(40\,\text{Hz})\rvert = 1/\sqrt 2$, y filtrar **por bloques** conservando el estado da lo mismo que filtrar la señal entera.
+
+### CROSS · Coincidencias y tres diferencias explicadas
+
+{{< include _n03-cross.md >}}
+
+Las tres diferencias tienen explicación, y ninguna es un error:
+
+- **Representación de las SOS.** DSP.jl guarda la ganancia global aparte y SciPy la integra en la primera sección. Son el mismo filtro escrito de dos formas.
+- **Fase cero.** Filtrar ida y vuelta elimina el desfase, pero obliga a **rellenar los bordes**, y cada biblioteca lo hace a su manera. La diferencia es de 0,03 cerca de los extremos y de $10^{-15}$ en el 80 % central.
+- **Una raíz doble mal condicionada.** Cada sección tiene un cero **doble** en $z = -1$. Si se reconstruyen los ceros a partir de los coeficientes con `sos2zpk`, aparecen a $6{,}7\times 10^{-9}$ de $-1$, unas $10^{7}$ veces el redondeo. No es un fallo de ninguna biblioteca: una raíz múltiple amplifica las perturbaciones de los coeficientes, del orden de $\sqrt{\varepsilon}$. Los ceros que SciPy calcula directamente son exactamente $-1$.
+
+::: {.callout-important}
+## Una lección sobre las tolerancias
+
+La comparación de los ceros **no cumplió** el criterio del protocolo ($\text{rtol}=10^{-12}$). En lugar de relajar la tolerancia después de ver el resultado, se **investigó la causa**, se clasificó como un problema de **precisión** y se añadió una comparación que no depende de la reconstrucción. El criterio original sigue visible en la tabla.
+:::
+
+## BENCH · Disposición y coste de la exactitud
+
+{{< include _n03-bench.md >}}
+
+- **Disposición.** Filtrar 31 canales es unas 2,3 veces más rápido cuando cada canal ocupa una columna contigua. La diferencia es menor que en N02 porque aquí el propio filtrado pesa más que el acceso a memoria.
+- **Exactitud.** El filtro de un polo con `Rational{BigInt}` es unas **590 veces** más lento que con `Float64`. La aritmética exacta sirve como **oráculo** para casos pequeños, no como herramienta de producción.
+
+## La ficha de evidencia
+
+{{< include _n03-ficha.md >}}
+
+Para reproducirlo:
+
+```bash
+bash scripts/reproducir_n03.sh
+julia --project=julia julia/scripts/bench_n03.jl   # BENCH, aparte
+```
+
+## Alcance y limitaciones
+
+- Solo se usan señales sintéticas.
+- El Butterworth no tiene demostración formal: su estabilidad y su respuesta se comprueban numéricamente.
+- Las diferencias de relleno de bordes en el filtrado de fase cero se documentan, pero no se resuelven.
+- La cota del error de `Float64` en el filtro de un polo se observa, pero no se demuestra.
+
+## Ejercicios
+
+1. Demuestra en Lean que, si dos entradas difieren como mucho en $\delta$ y los estados iniciales coinciden, las salidas difieren como mucho en $\delta$. ¿Qué relación tiene con la propagación de errores de redondeo?
+2. ¿Por qué un cero **doble** es más sensible a las perturbaciones que uno simple? Calcula a mano cuánto se desplazan las raíces de $z^2 + 2z + 1 + \varepsilon$.
+3. Mide cuánto cambia la diferencia de fase cero con MNE si recortas los primeros y últimos 50, 100 y 200 ms. ¿Qué criterio propondrías para el protocolo?
+
+*Las soluciones se publicarán aparte.*

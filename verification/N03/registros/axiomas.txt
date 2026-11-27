@@ -1,0 +1,5 @@
+'LeanlabBook.N03.convexa_acotada' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LeanlabBook.N03.filtro_acotado' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LeanlabBook.N03.filtro_causal' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LeanlabBook.N03.filtro_transitorio' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LeanlabBook.N03.filtro_continua' depends on axioms: [propext, Classical.choice, Quot.sound]

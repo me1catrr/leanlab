@@ -14,6 +14,7 @@ project:
     - fundamentos/f01.qmd
     - aplicaciones/n01.qmd
     - aplicaciones/n02.qmd
+    - aplicaciones/n03.qmd
     - referencias.qmd
     - entorno.qmd
     - laboratorio.qmd
@@ -54,6 +55,7 @@ book:
       chapters:
         - aplicaciones/n01.qmd
         - aplicaciones/n02.qmd
+        - aplicaciones/n03.qmd
     - referencias.qmd
   appendices:
     - entorno.qmd

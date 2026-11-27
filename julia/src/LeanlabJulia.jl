@@ -18,4 +18,8 @@ include("N02Calidad.jl")
 using .N02Calidad
 export N02Calidad
 
+include("N03Filtrado.jl")
+using .N03Filtrado
+export N03Filtrado
+
 end # module

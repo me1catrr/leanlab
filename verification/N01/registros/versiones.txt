@@ -1,5 +1,5 @@
-fecha: 2026-11-25T13:24:55Z
-commit_base: 917feb789b6138064a93a5f019c6eee4d445b370
+fecha: 2026-11-27T16:36:51Z
+commit_base: 7d3f21deda4d040498453769fc5bec2e1376cb77
 lean: Lean (version 4.36.0, arm64-apple-darwin24.6.0, commit 611c117bfaf7b7ae1cfcf246ce6fba31e8f509e9, Release)
 julia: julia version 1.12.3
 python: Python 3.12.15

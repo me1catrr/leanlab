@@ -1,0 +1,54 @@
+{
+ "protocolo": "verification/N03/protocolo.yml (versión 1)",
+ "versiones": {
+  "mne": "1.13.2",
+  "numpy": "2.5.5",
+  "scipy": "1.18.1"
+ },
+ "un_polo": {
+  "a1_julia_igual_lean": "ver TEST (igualdad exacta en Rational{BigInt})",
+  "a2_error_max_float64": 1.3877787807814457e-16,
+  "a2_error_en": {
+   "10": 5.551115123125783e-17,
+   "100": 2.7755575615628914e-17,
+   "1000": 5.551115123125783e-17,
+   "2000": 5.551115123125783e-17
+  },
+  "a2_dentro_tolerancia": true
+ },
+ "butterworth": {
+  "polos_iguales": true,
+  "ceros_iguales": false,
+  "ceros_max_dif_sos2zpk": 6.688967602030971e-09,
+  "ceros_iguales_zpk_directo": true,
+  "ganancia_jl_vs_sp_rel": 0.0,
+  "polos_modulo_max": 0.8298656234920576,
+  "estable": true,
+  "sos_scipy_igual_mne": true,
+  "sos_coeficientes_identicos_dsp_scipy": false,
+  "H_max_dif": 1.7763568394002505e-15,
+  "H_dentro_tolerancia": true,
+  "H0": 1.0000000000000009,
+  "H_corte": 0.7071067811865483,
+  "una_pasada_max_dif": 1.5543122344752192e-15,
+  "una_pasada_tolerancia": 1.5441418249012695e-09,
+  "una_pasada_dentro_tolerancia": true,
+  "impulso_max_dif": 2.7755575615628914e-17,
+  "fase_cero_max_dif_total": 0.030522034591380587,
+  "fase_cero_max_dif_central80": 1.7763568394002505e-15
+ },
+ "discrepancias": [
+  {
+   "tipo": "diferencia_metodologica",
+   "detalle": "representación de las SOS: DSP.jl guarda la ganancia global aparte y SciPy la integra en la primera sección; el orden y el emparejamiento de las secciones coinciden, y también los polos, la ganancia y la respuesta en frecuencia"
+  },
+  {
+   "tipo": "diferencia_metodologica",
+   "detalle": "filtrado de fase cero: MNE y DSP.jl rellenan los bordes de forma distinta; diferencia máxima 0.0305 en total y 1.78e-15 en el 80 % central"
+  },
+  {
+   "tipo": "precision",
+   "detalle": "los ceros reconstruidos desde las SOS con scipy.signal.sos2zpk difieren de −1 en 6.7e-09: el cero doble de cada sección es una raíz múltiple, mal condicionada; con los ceros que da directamente butter(…, output='zpk') la coincidencia es exacta"
+  }
+ ]
+}

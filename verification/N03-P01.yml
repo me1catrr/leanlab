@@ -1,0 +1,79 @@
+# Ficha de evidencia · N03 (filtrado)
+# Reproducción: bash scripts/reproducir_n03.sh   (BENCH aparte: julia --project=julia julia/scripts/bench_n03.jl)
+# Protocolo fijado antes de comparar: verification/N03/protocolo.yml (versión 1, commit 7d3f21d)
+
+id: N03-P01
+titulo: Filtro de un polo (exacto frente a Float64) y Butterworth de orden 4
+capitulo: N03
+aplicacion: NeuroMIND (EEG) · solo señales sintéticas
+propiedad: "acotación, causalidad, ganancia en continua y transitorio exacto del filtro de un polo; Butterworth estable con −3 dB en 40 Hz"
+
+especificacion:
+  contrato: verification/N03/protocolo.yml
+  convenciones:
+    - "y[n] = α·x[n] + (1 − α)·y[n − 1], y[−1] = y0, 0 < α ≤ 1"
+    - "Butterworth paso bajo de orden 4, fs = 500 Hz, corte 40 Hz, SOS, una pasada salvo indicación"
+
+codigo:
+  julia: julia/src/N03Filtrado.jl
+  lean: lean/LeanlabBook/N03/Recurrencia.lean
+  senales: scripts/n03_senales.py
+  cross: scripts/n03_cross.py
+  commit_protocolo: 7d3f21d
+
+evidencias:
+  PROOF:
+    resumen: "acotación BIBO, causalidad, ganancia en continua y transitorio exacto (1 − α)^(n+1) del filtro de un polo; 0 sorry"
+    estado: REPRODUCED
+    teoremas:
+      - LeanlabBook.N03.convexa_acotada
+      - LeanlabBook.N03.filtro_acotado       # N03-P01
+      - LeanlabBook.N03.filtro_causal        # N03-P02
+      - LeanlabBook.N03.filtro_continua      # N03-P03
+      - LeanlabBook.N03.filtro_transitorio   # N03-P04
+    oraculo_exacto: "lake exe n03_filtro (ℚ); salida en verification/N03/oraculo_lean/a1.txt"
+    sorry_admit: 0
+    axiomas_usados: "propext, Classical.choice, Quot.sound"
+    auditoria: verification/N03/registros/axiomas.txt
+  TEST:
+    resumen: "Julia exacto = oráculo Lean; propiedades en 500 casos Float64; Butterworth estable y −3 dB en el corte; 3 mutantes detectados"
+    estado: REPRODUCED
+    incluye:
+      - "a1: Julia Rational{BigInt} = Lean ℚ, igualdad exacta"
+      - "a2 (N = 2000, α = 1/10): Float64 frente a exacto, error máximo 1,4e-16, sin crecimiento con n"
+      - "filtrado por bloques con estado = filtrado completo"
+      - "mutantes detectados: α ↔ 1 − α; corte normalizado por fs en vez de por Nyquist; reinicio del estado en cada bloque"
+    registro: verification/N03/registros/julia_test.log
+  CROSS:
+    resumen: "DSP.jl = SciPy en polos, respuesta en frecuencia y salida (máx. 1,6e-15); MNE = SciPy en SOS; 2 diferencias metodológicas y 1 de precisión clasificadas"
+    estado: REPRODUCED
+    referencias: "SciPy 1.18.1 (butter, sosfilt, sosfreqz, sos2zpk), MNE 1.13.2 (create_filter, filter_data), DSP.jl 0.8.7"
+    resultados: verification/N03/cross.json
+    discrepancias:
+      - "diferencia metodológica: DSP.jl guarda la ganancia aparte; SciPy la integra en la primera sección"
+      - "diferencia metodológica: fase cero con relleno de bordes distinto (máx. 0,031 en total, 1,8e-15 en el 80 % central)"
+      - "precisión: ceros recuperados con sos2zpk a 6,7e-9 de −1 (raíz doble mal condicionada); exactos con butter(output='zpk')"
+  BENCH:
+    resumen: "Butterworth 2,3 veces más rápido por columnas (N × C); el filtro exacto en racionales, ~590 veces más lento que Float64"
+    estado: REPRODUCED
+    comando: julia --project=julia julia/scripts/bench_n03.jl
+    resultados: verification/N03/bench_julia.json
+    advertencias:
+      - "una máquina (Apple M2 Ultra), un hilo; no generalizable"
+
+correspondencia_formal_implementacion:
+  estado: INSPECTED
+  descripcion: >-
+    La salida exacta de Julia (Rational{BigInt}) coincide con el oráculo ejecutable de
+    Lean (filtroQ sobre ℚ) en a1. Las propiedades están demostradas sobre ℝ para la
+    función filtro, no para filtroQ ni para Float64; no hay prueba formal de que la
+    implementación Julia en Float64 las cumpla, aunque se ensayan en 500 casos.
+
+limitaciones:
+  - "solo señales sintéticas"
+  - "no hay demostración Lean del Butterworth (estabilidad, respuesta): se comprueba numéricamente"
+  - "filtfilt y relleno de bordes: diferencias documentadas, no resueltas"
+
+aplicacion_posterior: [N05, N06]
+estado_ejecucion: REPRODUCED
+aceptacion_cientifica: pendiente

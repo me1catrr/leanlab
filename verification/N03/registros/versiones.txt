@@ -1,0 +1,8 @@
+fecha: 2026-11-27T16:37:25Z
+commit_base: 7d3f21deda4d040498453769fc5bec2e1376cb77
+lean: Lean (version 4.36.0, arm64-apple-darwin24.6.0, commit 611c117bfaf7b7ae1cfcf246ce6fba31e8f509e9, Release)
+julia: julia version 1.12.3
+dsp.jl: 0.8.7
+python: Python 3.12.15
+mne/numpy/scipy: 1.13.2 2.5.5 1.18.1
+sistema: Darwin arm64

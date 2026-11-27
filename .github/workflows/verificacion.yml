@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   verificar:
-    name: F01, N01 y N02 · PROOF, TEST y CROSS
+    name: F01, N01, N02 y N03 · PROOF, TEST y CROSS
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -24,7 +24,7 @@ jobs:
         uses: leanprover/lean-action@v1
         with:
           lake-package-directory: lean
-          build-args: "LeanlabBook f01_tabla"
+          build-args: "LeanlabBook f01_tabla n03_filtro"
 
       - name: PROOF · Auditoría de axiomas (sin sorry)
         working-directory: lean
@@ -32,10 +32,12 @@ jobs:
           lake env lean LeanlabBook/F01/Auditoria.lean | tee axiomas_f01.txt
           lake env lean LeanlabBook/N01/Auditoria.lean | tee axiomas_n01.txt
           lake env lean LeanlabBook/N02/Auditoria.lean | tee axiomas_n02.txt
+          lake env lean LeanlabBook/N03/Auditoria.lean | tee axiomas_n03.txt
+          test "$(grep -c 'depends on axioms' axiomas_n03.txt)" -eq 5
           test "$(grep -c 'depends on axioms' axiomas_f01.txt)" -eq 6
           test "$(grep -c 'depends on axioms' axiomas_n01.txt)" -eq 4
           test "$(grep -c 'depends on axioms' axiomas_n02.txt)" -eq 5
-          ! grep -q 'sorryAx' axiomas_f01.txt axiomas_n01.txt axiomas_n02.txt
+          ! grep -q 'sorryAx' axiomas_f01.txt axiomas_n01.txt axiomas_n02.txt axiomas_n03.txt
 
       - name: PROOF · Oráculo ejecutable igual al versionado
         working-directory: lean
@@ -54,7 +56,17 @@ jobs:
           (cd verification/N01/ficheros && shasum -a 256 -c ../ficheros.sha256)
           uv run --project python python scripts/n02_datos.py
           (cd verification/N02/datos && shasum -a 256 -c ../datos.sha256)
+          uv run --project python python scripts/n03_senales.py
+          # b1 depende de la libm (sin) y puede variar en el último bit entre sistemas:
+          # se comprueban solo las entradas exactas.
+          (cd verification/N03/senales && grep -v ' b1.f64$' ../senales.sha256 | shasum -a 256 -c -)
           git diff --exit-code -- verification/N01/esperado verification/N02/esperado
+
+      - name: PROOF · Oráculo exacto de N03 igual al versionado
+        working-directory: lean
+        run: |
+          lake exe n03_filtro < ../verification/N03/senales/a1_entrada.txt > ../verification/N03/oraculo_lean/a1.txt
+          git diff --exit-code -- ../verification/N03/oraculo_lean
 
       - name: Instalar Julia
         uses: julia-actions/setup-julia@v2
@@ -73,8 +85,14 @@ jobs:
           julia --project=julia julia/scripts/n02_exportar.jl
           git diff --exit-code -- verification/F01/julia verification/N01/julia verification/N02/julia
 
-      - name: CROSS · NumPy y MNE-Python (pytest)
-        run: uv run --project python pytest python/tests -v
+      - name: CROSS · NumPy, SciPy y MNE-Python (pytest)
+        run: |
+          # N03 se recalcula en CI (sus valores en coma flotante pueden variar en el
+          # último bit entre sistemas) y debe cumplir los criterios del protocolo.
+          julia --project=julia julia/scripts/n03_exportar.jl
+          uv run --project python python scripts/n03_cross.py
+          uv run --project python pytest python/tests -v
+          git checkout -- verification/N03
 
       - name: LABORATORIO · Componentes del libro iguales a los versionados
         run: |

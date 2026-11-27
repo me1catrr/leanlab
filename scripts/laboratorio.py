@@ -147,6 +147,35 @@ def cross_n02(fuente: Path, salida: Path) -> None:
     escribir(salida, fuente.relative_to(RAIZ), cuerpo)
 
 
+def cross_n03(fuente: Path, salida: Path) -> None:
+    """Tabla CROSS del filtrado: criterio del protocolo, valor medido y resultado."""
+    d = json.loads(fuente.read_text(encoding="utf-8"))
+    bw, up = d["butterworth"], d["un_polo"]
+    ok = lambda b: '<span class="estado hecho">cumple</span>' if b else '<span class="estado">no cumple</span>'
+    filas = [
+        ("Un polo · Float64 frente a exacto (a2)", "error máx. ≤ 1e-12", f'{up["a2_error_max_float64"]:.2g}', ok(up["a2_dentro_tolerancia"])),
+        ("Polos DSP.jl = SciPy", "rtol 1e-12", f'|p| máx. {bw["polos_modulo_max"]:.4f}', ok(bw["polos_iguales"])),
+        ("Ceros (butter, zpk directo)", "rtol 1e-12", "−1 (×4)", ok(bw["ceros_iguales_zpk_directo"])),
+        ("Ceros (reconstruidos con sos2zpk)", "rtol 1e-12", f'{bw["ceros_max_dif_sos2zpk"]:.2g}', ok(bw["ceros_iguales"])),
+        ("|H(f)| en 512 frecuencias", "rtol 1e-10", f'{bw["H_max_dif"]:.2g}', ok(bw["H_dentro_tolerancia"])),
+        ("|H(0)| y |H(40 Hz)|", "1 y 1/√2", f'{bw["H0"]:.12f} · {bw["H_corte"]:.12f}', ok(abs(bw["H0"] - 1) < 1e-10 and abs(bw["H_corte"] - 2 ** -0.5) < 1e-10)),
+        ("Salida en una pasada (b1)", f'≤ {bw["una_pasada_tolerancia"]:.2g}', f'{bw["una_pasada_max_dif"]:.2g}', ok(bw["una_pasada_dentro_tolerancia"])),
+        ("SOS de MNE = SciPy", "rtol 1e-12", "—", ok(bw["sos_scipy_igual_mne"])),
+        ("Fase cero (DSP.jl filtfilt frente a MNE)", "se informa", f'{bw["fase_cero_max_dif_total"]:.2g} total · {bw["fase_cero_max_dif_central80"]:.2g} central', "—"),
+    ]
+    cuerpo_filas = "".join(f'<tr><th scope="row">{esc(a)}</th><td>{esc(b)}</td><td>{esc(c)}</td><td>{e}</td></tr>' for a, b, c, e in filas)
+    disc = "".join(f'<li><span class="estado">{esc(CLASES[x["tipo"]])}</span> {esc(x["detalle"])}</li>' for x in d["discrepancias"])
+    v = d["versiones"]
+    cuerpo = f"""<figure class="cross-studio" aria-label="Comparación cruzada del filtrado">
+<div class="tabla-desplazable"><table>
+<thead><tr><th scope="col">Criterio</th><th scope="col">Protocolo</th><th scope="col">Medido</th><th scope="col">Resultado</th></tr></thead>
+<tbody>{cuerpo_filas}</tbody></table></div>
+<p><strong>Discrepancias clasificadas</strong></p><ul>{disc}</ul>
+<figcaption>Generada desde <code>{esc(fuente.relative_to(RAIZ))}</code> (SHA-256 {sha16(fuente)}…). MNE {esc(v['mne'])}, NumPy {esc(v['numpy'])}, SciPy {esc(v['scipy'])}. Criterios y tolerancias fijados en el protocolo antes de comparar.</figcaption>
+</figure>"""
+    escribir(salida, fuente.relative_to(RAIZ), cuerpo)
+
+
 # --- Gráfico BENCH --------------------------------------------------------
 def formato_t(ns: float) -> str:
     if ns < 1e3:
@@ -235,6 +264,11 @@ def main() -> None:
         cross_n02(v / "N02" / "cross.json", BOOK / "aplicaciones" / "_n02-cross.md")
         bench(v / "N02" / "bench_julia.json", BOOK / "aplicaciones" / "_n02-bench.md",
               "N02 · métricas por canal según la disposición en memoria (31 × 500 000, Float64)", log=True)
+    if (v / "N03-P01.yml").exists():
+        ficha(v / "N03-P01.yml", BOOK / "aplicaciones" / "_n03-ficha.md")
+        cross_n03(v / "N03" / "cross.json", BOOK / "aplicaciones" / "_n03-cross.md")
+        bench(v / "N03" / "bench_julia.json", BOOK / "aplicaciones" / "_n03-bench.md",
+              "N03 · filtrado por disposición y coste de la aritmética exacta", log=True)
     datos_binario(BOOK / "assets" / "datos" / "binario-matriz.json")
     print("Componentes del Laboratorio regenerados.")
 
