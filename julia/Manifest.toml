@@ -2,7 +2,7 @@
 
 julia_version = "1.12.3"
 manifest_format = "2.0"
-project_hash = "3a534f93c4b59e67de9debbb37edc837c9a3c169"
+project_hash = "dda00850c01222580f41b08020fda2dc465f5664"
 
 [[deps.Artifacts]]
 uuid = "56f22d72-fd6d-98f1-02f0-08ddc0907c33"
@@ -63,7 +63,7 @@ uuid = "ac6e5ff7-fb65-4e79-a425-ec3bc9c03011"
 version = "1.12.0"
 
 [[deps.LeanlabJulia]]
-deps = ["BenchmarkTools"]
+deps = ["BenchmarkTools", "Test"]
 path = "."
 uuid = "5d3b8f0e-6a41-4c2e-9f6b-1e2a7c9d4b10"
 version = "0.1.0"

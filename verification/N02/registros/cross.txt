@@ -1,0 +1,7 @@
+<repo>/scripts/n02_cross.py:53: RuntimeWarning: Precision loss occurred in moment calculation due to catastrophic cancellation. This occurs when the data are nearly identical. Results may be unreliable.
+  z_sc = stats.zscore(sigma[en_z], ddof=0) if en_z else np.array([])
+d1_mixto           julia=oráculo:True numpy=oráculo:True métricas:True planos contrato/MNE: [2]/[2] → sin_discrepancia
+d2_ocho_canales    julia=oráculo:True numpy=oráculo:True métricas:True planos contrato/MNE: []/[] → sin_discrepancia
+d3_once_canales    julia=oráculo:True numpy=oráculo:True métricas:True planos contrato/MNE: []/[] → sin_discrepancia
+d4_identicos       julia=oráculo:True numpy=oráculo:True métricas:True planos contrato/MNE: []/[] → diferencia_metodologica
+d5_plano_parcial   julia=oráculo:True numpy=oráculo:True métricas:True planos contrato/MNE: []/[0] → diferencia_metodologica

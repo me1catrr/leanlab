@@ -14,4 +14,8 @@ include("N01BrainVision.jl")
 using .N01BrainVision
 export N01BrainVision
 
+include("N02Calidad.jl")
+using .N02Calidad
+export N02Calidad
+
 end # module

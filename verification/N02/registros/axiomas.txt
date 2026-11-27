@@ -1,0 +1,5 @@
+'LeanlabBook.N02.samuelson_desv' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LeanlabBook.N02.samuelson' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LeanlabBook.N02.z_cuadrado_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LeanlabBook.N02.z_le_tres' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LeanlabBook.N02.once_canales_basta' depends on axioms: [propext, Classical.choice, Quot.sound]

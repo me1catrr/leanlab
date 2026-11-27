@@ -1,0 +1,77 @@
+# Ficha de evidencia · N02 (control de calidad por canal)
+# Reproducción: bash scripts/reproducir_n02.sh   (BENCH aparte: julia --project=julia julia/scripts/bench_n02.jl)
+# Protocolo fijado antes de comparar: verification/N02/protocolo.yml (versión 1, commit 12215b4)
+
+id: N02-P01
+titulo: Control de calidad por canal y cota de Samuelson para el z-score
+capitulo: N02
+aplicacion: NeuroMIND (EEG) · solo datos sintéticos
+propiedad: "con n canales en el cálculo, |z| ≤ √(n − 1); con n ≤ 10 ningún canal supera |z| > 3"
+
+especificacion:
+  contrato: verification/N02/protocolo.yml
+  convenciones:
+    - "z-score POBLACIONAL (ddof = 0) de la desviación típica poblacional de cada canal"
+    - "el z se calcula solo sobre canales válidos y no planos"
+
+codigo:
+  julia: julia/src/N02Calidad.jl          # control de calidad original de LEANLAB
+  lean: lean/LeanlabBook/N02/Samuelson.lean
+  datos: scripts/n02_datos.py             # ondas cuadradas ±A y oráculo exacto (fracciones y 80 dígitos)
+  cross: scripts/n02_cross.py
+  commit_protocolo: 12215b4
+
+evidencias:
+  PROOF:
+    resumen: "desigualdad de Samuelson, cota |z| ≤ 3 con n ≤ 10 y ejemplo ajustado con 11 canales; 0 sorry"
+    estado: REPRODUCED
+    teoremas:
+      - LeanlabBook.N02.samuelson_desv
+      - LeanlabBook.N02.samuelson
+      - LeanlabBook.N02.z_cuadrado_le
+      - LeanlabBook.N02.z_le_tres            # N02-P01
+      - LeanlabBook.N02.once_canales_basta   # la cota es ajustada en el umbral
+    sorry_admit: 0
+    axiomas_usados: "propext, Classical.choice, Quot.sound"
+    auditoria: verification/N02/registros/axiomas.txt
+  TEST:
+    resumen: "etiquetas = oráculo exacto en 5 conjuntos; propiedad de Samuelson en 2000 matrices aleatorias; 1 mutante superviviente documentado"
+    estado: REPRODUCED
+    incluye:
+      - "8 canales, uno 45 veces mayor: no se marca (z máx ≈ √7)"
+      - "11 canales, uno un 2,5 % mayor: z = √10, se marca"
+      - "enmascaramiento en d1: el canal de 400 µV no se marca porque el saturado infla la dispersión"
+      - "mutantes detectados: no excluir canales con NaN, incluir canales planos en z"
+      - "mutante SUPERVIVIENTE: «>» frente a «≥» en el umbral (ningún conjunto cae en z = 3)"
+    registro: verification/N02/registros/julia_test.log
+  CROSS:
+    resumen: "Julia = NumPy/SciPy = oráculo en etiquetas y métricas; 2 diferencias metodológicas (SciPy NaN, planos por tramos en MNE)"
+    estado: REPRODUCED
+    referencias: "NumPy 2.5.5 / SciPy 1.18.1 (implementación independiente), MNE 1.13.2 (annotate_amplitude, solo planos)"
+    tolerancia: "rtol 1e-12, atol 0; etiquetas exactas"
+    resultados: verification/N02/cross.json
+  BENCH:
+    resumen: "métricas por canal 27 veces más rápidas con los canales en columnas contiguas (N × C) que en filas (C × N)"
+    estado: REPRODUCED
+    comando: julia --project=julia julia/scripts/bench_n02.jl
+    resultados: verification/N02/bench_julia.json
+    advertencias:
+      - "una máquina (Apple M2 Ultra), un hilo; no generalizable"
+      - "la disposición C × N viene de F01; cambiarla es una decisión de diseño, no aplicada"
+
+correspondencia_formal_implementacion:
+  estado: INSPECTED
+  descripcion: >-
+    Lean demuestra la cota de Samuelson sobre ℝ con media y varianza poblacionales.
+    El control de calidad Julia usa esas mismas definiciones (std con corrected = false)
+    y la prueba de propiedad comprueba la cota en 2000 casos aleatorios en Float64,
+    pero no hay prueba formal de la implementación.
+
+limitaciones:
+  - "solo datos sintéticos; umbrales elegidos para el estudio, no recomendaciones clínicas"
+  - "otras definiciones de z (ddof = 1, z robusto con mediana/MAD) tienen otras cotas y no se estudian aquí"
+  - "el mutante «>»/«≥» sobrevive: falta un caso con z exactamente 3"
+
+aplicacion_posterior: [N03, N04]
+estado_ejecucion: REPRODUCED
+aceptacion_cientifica: pendiente

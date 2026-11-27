@@ -13,6 +13,7 @@ project:
     - hoja-de-ruta.qmd
     - fundamentos/f01.qmd
     - aplicaciones/n01.qmd
+    - aplicaciones/n02.qmd
     - referencias.qmd
     - entorno.qmd
     - laboratorio.qmd
@@ -52,6 +53,7 @@ book:
     - part: "Aplicaciones · NeuroMIND"
       chapters:
         - aplicaciones/n01.qmd
+        - aplicaciones/n02.qmd
     - referencias.qmd
   appendices:
     - entorno.qmd

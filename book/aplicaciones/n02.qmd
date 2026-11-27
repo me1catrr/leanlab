@@ -1,0 +1,128 @@
+---
+title: "N02 · Control de calidad por canal"
+subtitle: "Umbrales, z-scores y lo que la aritmética no permite detectar"
+---
+
+::: {.ficha-cap}
+**N02/{{< meta editorial.neuromind >}}** · Aplicaciones · NeuroMIND (EEG) · Ficha **N02-P01** · Estado de la evidencia: [REPRODUCED]{.estado .hecho} · Aceptación científica: [pendiente]{.estado}
+:::
+
+Tras leer un registro ([N01](n01.qmd)), el siguiente paso habitual es revisar cada canal. Un electrodo desconectado da una señal **plana**; uno saturado se queda en el límite del amplificador; uno con mal contacto muestra una amplitud **atípica** frente a los demás. Los controles automáticos usan umbrales sencillos, y precisamente por eso conviene saber **qué pueden y qué no pueden detectar**.
+
+::: {.callout-note}
+## Solo datos sintéticos
+
+Las matrices de este capítulo las genera `scripts/n02_datos.py` y no contienen datos de ninguna persona. Los umbrales se eligieron para el estudio y **no son recomendaciones clínicas**. El control de calidad en Julia es una implementación original de LEANLAB.
+:::
+
+## El contrato
+
+| Contrato | Regla |
+|---|---|
+| N02-C01 | **No válido:** el canal contiene algún NaN o Inf, y se excluye del resto de comprobaciones |
+| N02-C02 | **Plano:** rango pico a pico < 1 µV |
+| N02-C03 | **Saturado:** al menos el 1 % de las muestras con $\lvert x \rvert \ge 1000$ µV |
+| N02-C04 | **Atípico:** $\lvert z \rvert > 3$, donde $z$ es el z-score poblacional de la desviación típica de cada canal, calculado sobre los canales válidos y no planos |
+| N02-C05 | Las etiquetas se combinan; un canal es malo si tiene alguna |
+| N02-C06 | Los datos no se modifican |
+
+Para el z-score se usan la media y la desviación típica **poblacionales**, con denominador $n$:
+
+$$
+z_c = \frac{\sigma_c - \bar\sigma}{s_\sigma}, \qquad
+s_\sigma^2 = \frac{1}{n}\sum_{c} (\sigma_c - \bar\sigma)^2 .
+$$
+
+El contrato, los conjuntos de datos y las tolerancias se registraron en `verification/N02/protocolo.yml` **antes** de comparar.
+
+{{< include _n02-qc.md >}}
+
+## PROOF · Lo que un umbral en z no puede detectar
+
+Un z-score mide cuánto se aparta un canal **en relación con los demás**, y eso tiene un límite aritmético. Es la **desigualdad de Samuelson**: con $n$ valores y desviación típica poblacional,
+
+$$
+z_c^2 \le n - 1 \qquad\text{para todo } c .
+$$
+
+De ahí sale una consecuencia práctica (**N02-P01**): **con 10 canales o menos, ningún canal puede superar $\lvert z \rvert > 3$**, por grande que sea su amplitud. Con 11 canales ya puede ocurrir, y Lean lo demuestra con un ejemplo concreto.
+
+{{< include _n02-visor.md >}}
+
+La demostración aplica Cauchy–Schwarz a los demás $n-1$ términos, cuya suma es $-d_j$ porque las desviaciones suman cero. Los cinco teoremas compilan sin `sorry`.
+
+::: {.callout-important}
+## Consecuencias para un control de calidad
+
+- **Montajes pequeños:** en un registro de 8 canales, el criterio $\lvert z \rvert > 3$ **nunca** marca nada. No es un fallo de la implementación: es una imposibilidad matemática.
+- **Sensibilidad relativa:** con 11 canales, diez idénticos y uno solo un 2,5 % mayor, ese canal da $z = \sqrt{10} \approx 3{,}16$ y se marca. El z-score no mide «cuánto», sino «cuánto en relación con los demás».
+- **Enmascaramiento:** un canal muy anómalo infla la dispersión y puede ocultar otro anómalo, como ocurre en el conjunto d1.
+:::
+
+## TEST · Contra un oráculo exacto
+
+Cada canal sintético es una onda cuadrada $\pm A$, cuya desviación típica poblacional es **exactamente** $A$. Así, el oráculo decide cada etiqueta con aritmética exacta: compara $z^2$ con 9 usando fracciones y raíces con 80 dígitos, nunca `Float64`.
+
+| Conjunto | Qué muestra | Resultado |
+|---|---|---|
+| d1 · mixto (16 canales) | Plano, saturado, no válido y un canal de 400 µV | El canal de 400 µV **no** se marca: lo enmascara el saturado (1000 µV) |
+| d2 · 8 canales | Un canal **45 veces mayor** | **No** se marca: $z \approx 2{,}646 \approx \sqrt 7$ |
+| d3 · 11 canales | Diez iguales y uno un 2,5 % mayor | Se marca: $z = \sqrt{10}$ |
+| d4 · 12 idénticos | Dispersión cero | Ningún atípico (z no definido) |
+| d5 · plano a medias | Canal plano la mitad del registro | No es plano para el contrato |
+
+Las pruebas de Julia comprueban las etiquetas de los cinco conjuntos frente al oráculo. También comprueban la **propiedad** de Samuelson en 2000 matrices aleatorias con amplitudes muy dispares y la pureza de la función. Además, se introducen errores típicos a propósito:
+
+{{< include _n02-mutaciones.md >}}
+
+::: {.callout-warning}
+## Un mutante superviviente
+
+Cambiar `>` por `≥` en el umbral **no lo detecta ninguna prueba**, porque ningún conjunto cae exactamente en $z = 3$. No es un éxito del código, sino un **hueco de las pruebas**, y queda documentado en la ficha. Para cerrarlo hace falta un caso con $z = 3$ exacto. Con la cota de Samuelson se puede construir: 10 canales, nueve iguales y uno distinto.
+:::
+
+## CROSS · NumPy/SciPy y MNE
+
+La comparación usa una implementación independiente del mismo contrato en Python (`numpy.std` y `scipy.stats.zscore`, ambos con `ddof = 0`). Para los canales planos se usa además la función `annotate_amplitude` de MNE.
+
+{{< include _n02-cross.md >}}
+
+Julia, NumPy/SciPy y el oráculo coinciden en todas las etiquetas y métricas. Las dos diferencias son de **definición**, no errores:
+
+- **Dispersión nula (d4).** `scipy.stats.zscore` emite un aviso de «cancelación catastrófica» y devuelve `NaN`. El contrato lo resuelve explícitamente: no hay ningún atípico.
+- **Planos por tramos (d5).** MNE considera plano un tramo en el que la diferencia entre muestras consecutivas no supera el umbral, y marca el canal si eso ocurre en más del 5 % del registro. El contrato mira el rango del registro completo. Las dos definiciones responden a preguntas distintas.
+
+## BENCH · La disposición en memoria importa
+
+Julia guarda las matrices **por columnas**. En la matriz canales × muestras de F01, las muestras de un mismo canal no son contiguas en memoria: entre una y la siguiente hay un salto de $C$ valores.
+
+{{< include _n02-bench.md >}}
+
+Calcular las mismas métricas por canal es unas **27 veces más rápido** cuando cada canal ocupa una columna contigua ($N \times C$). Antes de medir se comprueba que los resultados coinciden.
+
+Esto plantea una decisión de diseño **que no se aplica aquí**: la disposición $C \times N$ es natural para leer el archivo (F01) y la $N \times C$ lo es para procesar cada canal. Cambiarla afectaría a F01, N01 y N02, y habría que volver a verificarlos.
+
+## La ficha de evidencia
+
+{{< include _n02-ficha.md >}}
+
+Para reproducirlo:
+
+```bash
+bash scripts/reproducir_n02.sh
+julia --project=julia julia/scripts/bench_n02.jl   # BENCH, aparte
+```
+
+## Alcance y limitaciones
+
+- Solo se usan datos sintéticos, con umbrales elegidos para el estudio.
+- Otras definiciones del z-score tienen otras cotas y no se estudian aquí: con $n - 1$ en el denominador la cota es $(n-1)/\sqrt n$, y los z-scores robustos basados en la mediana y la MAD tienen las suyas.
+- El mutante `>`/`≥` sigue vivo.
+
+## Ejercicios
+
+1. Demuestra que, con desviación típica **muestral** (denominador $n-1$), la cota es $\lvert z\rvert \le (n-1)/\sqrt n$. ¿A partir de cuántos canales puede superarse $\lvert z \rvert > 3$?
+2. Construye un conjunto que **mate** al mutante superviviente: diez canales con un z exactamente igual a 3. Comprueba que el oráculo y las pruebas lo distinguen.
+3. Diseña un criterio de atípicos que **no** sufra enmascaramiento en d1 (por ejemplo, con mediana y MAD). ¿Qué propiedad podrías demostrar en Lean?
+
+*Las soluciones se publicarán aparte.*

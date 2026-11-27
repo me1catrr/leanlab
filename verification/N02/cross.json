@@ -1,0 +1,191 @@
+{
+ "protocolo": "verification/N02/protocolo.yml (versión 1)",
+ "mne": "1.13.2",
+ "numpy": "2.5.5",
+ "scipy": "1.18.1",
+ "tolerancia": {
+  "rtol": 1e-12,
+  "atol": 0.0
+ },
+ "resultados": [
+  {
+   "conjunto": "d1_mixto",
+   "etiquetas_oraculo": [
+    [],
+    [],
+    [
+     "plano"
+    ],
+    [],
+    [],
+    [
+     "saturado",
+     "atipico"
+    ],
+    [],
+    [],
+    [],
+    [
+     "no_valido"
+    ],
+    [],
+    [],
+    [],
+    [],
+    [],
+    []
+   ],
+   "julia_igual_oraculo": true,
+   "numpy_igual_oraculo": true,
+   "metricas_julia_vs_numpy": {
+    "sigma": true,
+    "rango": true,
+    "frac_sat": true,
+    "z": true
+   },
+   "max_dif_z": 0.0,
+   "planos_contrato": [
+    2
+   ],
+   "planos_mne": [
+    2
+   ],
+   "z_scipy_tiene_nan": false,
+   "discrepancias": [],
+   "clasificacion": "sin_discrepancia"
+  },
+  {
+   "conjunto": "d2_ocho_canales",
+   "etiquetas_oraculo": [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    []
+   ],
+   "julia_igual_oraculo": true,
+   "numpy_igual_oraculo": true,
+   "metricas_julia_vs_numpy": {
+    "sigma": true,
+    "rango": true,
+    "frac_sat": true,
+    "z": true
+   },
+   "max_dif_z": 0.0,
+   "planos_contrato": [],
+   "planos_mne": [],
+   "z_scipy_tiene_nan": false,
+   "discrepancias": [],
+   "clasificacion": "sin_discrepancia"
+  },
+  {
+   "conjunto": "d3_once_canales",
+   "etiquetas_oraculo": [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [
+     "atipico"
+    ]
+   ],
+   "julia_igual_oraculo": true,
+   "numpy_igual_oraculo": true,
+   "metricas_julia_vs_numpy": {
+    "sigma": true,
+    "rango": true,
+    "frac_sat": true,
+    "z": true
+   },
+   "max_dif_z": 0.0,
+   "planos_contrato": [],
+   "planos_mne": [],
+   "z_scipy_tiene_nan": false,
+   "discrepancias": [],
+   "clasificacion": "sin_discrepancia"
+  },
+  {
+   "conjunto": "d4_identicos",
+   "etiquetas_oraculo": [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    []
+   ],
+   "julia_igual_oraculo": true,
+   "numpy_igual_oraculo": true,
+   "metricas_julia_vs_numpy": {
+    "sigma": true,
+    "rango": true,
+    "frac_sat": true,
+    "z": true
+   },
+   "max_dif_z": null,
+   "planos_contrato": [],
+   "planos_mne": [],
+   "z_scipy_tiene_nan": true,
+   "discrepancias": [
+    {
+     "tipo": "diferencia_metodologica",
+     "detalle": "scipy.stats.zscore devuelve NaN si la dispersión es 0; el contrato define «ningún atípico»"
+    }
+   ],
+   "clasificacion": "diferencia_metodologica"
+  },
+  {
+   "conjunto": "d5_plano_parcial",
+   "etiquetas_oraculo": [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    []
+   ],
+   "julia_igual_oraculo": true,
+   "numpy_igual_oraculo": true,
+   "metricas_julia_vs_numpy": {
+    "sigma": true,
+    "rango": true,
+    "frac_sat": true,
+    "z": true
+   },
+   "max_dif_z": 0.0,
+   "planos_contrato": [],
+   "planos_mne": [
+    0
+   ],
+   "z_scipy_tiene_nan": false,
+   "discrepancias": [
+    {
+     "tipo": "diferencia_metodologica",
+     "detalle": "MNE marca como plano un canal plano solo por tramos; el contrato mira el registro completo"
+    }
+   ],
+   "clasificacion": "diferencia_metodologica"
+  }
+ ]
+}

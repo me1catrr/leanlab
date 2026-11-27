@@ -11,15 +11,15 @@ LEANLAB avanza por **sesiones** de alcance cerrado. Cada una termina con un info
 | S2 | Repositorio público y edición mínima del libro | [Completada]{.estado .hecho} |
 | S3 | Fundamentos · F01/{{< meta editorial.foundations >}} y apéndice de entorno | [Completada]{.estado .hecho} |
 | S4 | NeuroMIND · N01/{{< meta editorial.neuromind >}} (carga BrainVision) | [Completada]{.estado .hecho} |
-| S5 | Laboratorio de código (Code Studio): primeros componentes | [En curso: esta edición]{.estado} |
-| S6 | Ampliación de NeuroMIND (filtrado, segmentación, espectro, conectividad, subrogados) | [Pendiente]{.estado} |
+| S5 | Laboratorio de código (Code Studio): primeros componentes | [Completada]{.estado .hecho} |
+| S6 | Ampliación de NeuroMIND (filtrado, segmentación, espectro, conectividad, subrogados) | [En curso: N02 y N03]{.estado} |
 | S7+ | Transferencia a BRINCADIANO, SMARTBRIDGES y docencia | [Futuro]{.estado} |
 
 : Sesiones de LEANLAB.
 
 ## Lo que esta edición todavía no contiene
 
-- **Capítulos.** Están publicados F01 y N01; el resto, pendiente.
-- **Resultados.** Solo los de F01 y N01, con sus fichas de evidencia.
+- **Capítulos.** Están publicados F01, N01 y N02; el resto, pendiente.
+- **Resultados.** Solo los de los capítulos publicados, con sus fichas de evidencia.
 - **Demostraciones Lean previas.** Las de subrogados, Benjamini–Hochberg y wPLI se publicarán cuando exista una versión publicable con historial limpio, y después de comprobar que es equivalente al original preservado.
 - **Edición PDF.** Prevista con Typst en una segunda fase editorial.

@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   verificar:
-    name: F01 y N01 · PROOF, TEST y CROSS
+    name: F01, N01 y N02 · PROOF, TEST y CROSS
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -31,9 +31,11 @@ jobs:
         run: |
           lake env lean LeanlabBook/F01/Auditoria.lean | tee axiomas_f01.txt
           lake env lean LeanlabBook/N01/Auditoria.lean | tee axiomas_n01.txt
+          lake env lean LeanlabBook/N02/Auditoria.lean | tee axiomas_n02.txt
           test "$(grep -c 'depends on axioms' axiomas_f01.txt)" -eq 6
           test "$(grep -c 'depends on axioms' axiomas_n01.txt)" -eq 4
-          ! grep -q 'sorryAx' axiomas_f01.txt axiomas_n01.txt
+          test "$(grep -c 'depends on axioms' axiomas_n02.txt)" -eq 5
+          ! grep -q 'sorryAx' axiomas_f01.txt axiomas_n01.txt axiomas_n02.txt
 
       - name: PROOF · Oráculo ejecutable igual al versionado
         working-directory: lean
@@ -46,11 +48,13 @@ jobs:
       - name: Instalar uv
         uses: astral-sh/setup-uv@v6
 
-      - name: DATOS · Ficheros BrainVision sintéticos (huellas)
+      - name: DATOS · Ficheros sintéticos de N01 y N02 (huellas)
         run: |
           uv run --project python python scripts/n01_ficheros.py
           (cd verification/N01/ficheros && shasum -a 256 -c ../ficheros.sha256)
-          git diff --exit-code -- verification/N01/esperado
+          uv run --project python python scripts/n02_datos.py
+          (cd verification/N02/datos && shasum -a 256 -c ../datos.sha256)
+          git diff --exit-code -- verification/N01/esperado verification/N02/esperado
 
       - name: Instalar Julia
         uses: julia-actions/setup-julia@v2
@@ -66,7 +70,8 @@ jobs:
         run: |
           julia --project=julia julia/scripts/exportar_tabla.jl
           julia --project=julia julia/scripts/n01_exportar.jl
-          git diff --exit-code -- verification/F01/julia verification/N01/julia
+          julia --project=julia julia/scripts/n02_exportar.jl
+          git diff --exit-code -- verification/F01/julia verification/N01/julia verification/N02/julia
 
       - name: CROSS · NumPy y MNE-Python (pytest)
         run: uv run --project python pytest python/tests -v

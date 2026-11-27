@@ -122,6 +122,31 @@ def cross(fuente: Path, salida: Path) -> None:
     escribir(salida, fuente.relative_to(RAIZ), cuerpo)
 
 
+def cross_n02(fuente: Path, salida: Path) -> None:
+    """Tabla CROSS del control de calidad: etiquetas y coincidencias por conjunto."""
+    d = json.loads(fuente.read_text(encoding="utf-8"))
+    si_no = lambda b: "sí" if b else "<strong>no</strong>"
+    filas = []
+    for r in d["resultados"]:
+        marcados = "; ".join(f"{c}: {', '.join(e)}" for c, e in enumerate(r["etiquetas_oraculo"]) if e) or "ninguno"
+        notas = "<br>".join(esc(x["detalle"]) for x in r["discrepancias"]) or "—"
+        clase = "estado hecho" if r["clasificacion"] == "sin_discrepancia" else "estado"
+        filas.append(
+            f'<tr><th scope="row"><code>{esc(r["conjunto"])}</code></th><td>{esc(marcados)}</td>'
+            f'<td>{si_no(r["julia_igual_oraculo"])}</td><td>{si_no(r["numpy_igual_oraculo"])}</td>'
+            f'<td>{si_no(all(r["metricas_julia_vs_numpy"].values()))}</td>'
+            f'<td>{esc(r["planos_contrato"])} / {esc(r["planos_mne"])}</td>'
+            f'<td><span class="{clase}">{esc(CLASES[r["clasificacion"]])}</span><br><small>{notas}</small></td></tr>')
+    tol = d["tolerancia"]
+    cuerpo = f"""<figure class="cross-studio" aria-label="Comparación cruzada del control de calidad">
+<div class="tabla-desplazable"><table>
+<thead><tr><th scope="col">Conjunto</th><th scope="col">Canales marcados (oráculo)</th><th scope="col">Julia = oráculo</th><th scope="col">NumPy = oráculo</th><th scope="col">Métricas Julia = NumPy</th><th scope="col">Planos: contrato / MNE</th><th scope="col">Clasificación</th></tr></thead>
+<tbody>{''.join(filas)}</tbody></table></div>
+<figcaption>Generada desde <code>{esc(fuente.relative_to(RAIZ))}</code> (SHA-256 {sha16(fuente)}…). MNE {esc(d['mne'])}, NumPy {esc(d['numpy'])}, SciPy {esc(d['scipy'])}; métricas con rtol = {tol['rtol']:g}, atol = {tol['atol']:g}; etiquetas por igualdad exacta. Protocolo fijado antes de comparar.</figcaption>
+</figure>"""
+    escribir(salida, fuente.relative_to(RAIZ), cuerpo)
+
+
 # --- Gráfico BENCH --------------------------------------------------------
 def formato_t(ns: float) -> str:
     if ns < 1e3:
@@ -205,6 +230,11 @@ def main() -> None:
           "F01 · construir la matriz canales × muestras (31 × 100 000, Float32)", log=True)
     bench(v / "N01" / "bench_julia.json", BOOK / "aplicaciones" / "_n01-bench.md",
           "N01 · etapas del lector BrainVision (31 × 500 000, INT_16)", log=False)
+    if (v / "N02-P01.yml").exists():
+        ficha(v / "N02-P01.yml", BOOK / "aplicaciones" / "_n02-ficha.md")
+        cross_n02(v / "N02" / "cross.json", BOOK / "aplicaciones" / "_n02-cross.md")
+        bench(v / "N02" / "bench_julia.json", BOOK / "aplicaciones" / "_n02-bench.md",
+              "N02 · métricas por canal según la disposición en memoria (31 × 500 000, Float64)", log=True)
     datos_binario(BOOK / "assets" / "datos" / "binario-matriz.json")
     print("Componentes del Laboratorio regenerados.")
 
